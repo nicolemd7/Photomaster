@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "544197596215",
+    "project_id": "photomaster-b3a49",
+    "storage_bucket": "photomaster-b3a49.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544197596215:android:8130ac07078c2cc7dc1bb2",
+        "android_client_info": {
+          "package_name": "com.example.photomaster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544197596215-05ku922fr44dn6vs7678s7n36370skjm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0QtJp8568gkIyZ8UhIfvJeWuRvHarWSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544197596215-05ku922fr44dn6vs7678s7n36370skjm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
