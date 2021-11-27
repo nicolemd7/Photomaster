@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:photomaster/Screens/home.dart';
+import 'package:photomaster/Screens/gallery.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Photomaster());
 }
 
-class MyApp extends StatelessWidget {
+class Photomaster extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Text('Flutter Demo'),
+      initialRoute: HomeScreen.id,
+      routes: {
+        HomeScreen.id: (context) => HomeScreen(),
+        GalleryScreen.id: (context) => GalleryScreen(),
+      },
     );
   }
 }
