@@ -12,15 +12,12 @@ class Photomaster extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      builder: (_) => AppDatabase(),
-      child: MaterialApp(
-        initialRoute: HomeScreen.id,
-        routes: {
-          HomeScreen.id: (context) => HomeScreen(),
-          GalleryScreen.id: (context) => GalleryScreen(),
-        },
-      ),
+    return MaterialApp(
+      initialRoute: HomeScreen.id,
+      routes: {
+        HomeScreen.id: (context) => HomeScreen(),
+        GalleryScreen.id: (context) => GalleryScreen(),
+      },
     );
   }
 }
