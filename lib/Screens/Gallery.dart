@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_player/video_player.dart';
 
-
 class GalleryScreen extends StatefulWidget {
   static const String id = "gallery_screen";
   @override
