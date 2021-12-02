@@ -9,8 +9,8 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:photomaster/Screens/Images_Details.dart';
 import 'package:video_player/video_player.dart';
-
 
 var suggestTag = [
   "Bird",
@@ -108,72 +108,78 @@ class AssetThumbnail extends StatelessWidget {
                 builder: (_) {
                   if (asset.type == AssetType.image) {
                     // If this is an image, navigate to ImageScreen
-                    return Flexible(
-                      child: Column(
-                        children: [
-                          ImageScreen(imageFile: asset.file),
-                          Material(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: TypeAheadField(
-                                textFieldConfiguration: TextFieldConfiguration(
-                                    controller: textController,
-                                    onEditingComplete: () {
-                                      controller.ListTags.add(
-                                          textController.text);
-                                      textController.clear();
-                                    },
-                                    autofocus: false,
-                                    style: DefaultTextStyle.of(context)
-                                        .style
-                                        .copyWith(
-                                            fontSize: 20,
-                                            fontStyle: FontStyle.normal),
-                                    decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: 'Select or Enter a Tag')),
-                                suggestionsCallback: (String pattern) {
-                                  return suggestTag.where((e) => e
-                                      .toLowerCase()
-                                      .contains(pattern.toLowerCase()));
-                                },
-                                onSuggestionSelected: (String suggestion) =>
-                                    controller.ListTags.add(suggestion),
-                                itemBuilder:
-                                    (BuildContext context, String itemData) {
-                                  return ListTile(
-                                    leading: Icon(Icons.tag),
-                                    title: Text(itemData),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Obx(() => controller.ListTags.length == 0
-                              ? Center(
-                                  child: Text('No tag selected'),
-                                )
-                              : Material(
-                                  child: Wrap(
-                                      children: controller.ListTags.map(
-                                          (element) => Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4),
-                                              child: Chip(
-                                                label: Text(element),
-                                                deleteIcon: Icon(Icons.clear),
-                                                onDeleted: () =>
-                                                    controller.ListTags.remove(
-                                                        element),
-                                              ))).toList()),
-                                ))
-                        ],
-                      ),
+                    // return ImageScreen(imageFile: asset.file);
+                    return ImageDetails(
+                      img: asset.file,
+                      img_path: "abc",
+                      img_tags: "abc",
                     );
+                    // return Flexible(
+                    //   child: Column(
+                    //     children: [
+                    //       ImageScreen(imageFile: asset.file),
+                    //       Material(
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.all(8),
+                    //           child: TypeAheadField(
+                    //             textFieldConfiguration: TextFieldConfiguration(
+                    //                 controller: textController,
+                    //                 onEditingComplete: () {
+                    //                   controller.ListTags.add(
+                    //                       textController.text);
+                    //                   textController.clear();
+                    //                 },
+                    //                 autofocus: false,
+                    //                 style: DefaultTextStyle.of(context)
+                    //                     .style
+                    //                     .copyWith(
+                    //                         fontSize: 20,
+                    //                         fontStyle: FontStyle.normal),
+                    //                 decoration: InputDecoration(
+                    //                     border: OutlineInputBorder(),
+                    //                     hintText: 'Select or Enter a Tag')),
+                    //             suggestionsCallback: (String pattern) {
+                    //               return suggestTag.where((e) => e
+                    //                   .toLowerCase()
+                    //                   .contains(pattern.toLowerCase()));
+                    //             },
+                    //             onSuggestionSelected: (String suggestion) =>
+                    //                 controller.ListTags.add(suggestion),
+                    //             itemBuilder:
+                    //                 (BuildContext context, String itemData) {
+                    //               return ListTile(
+                    //                 leading: Icon(Icons.tag),
+                    //                 title: Text(itemData),
+                    //               );
+                    //             },
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       SizedBox(
+                    //         height: 10,
+                    //       ),
+                    //       Obx(() => controller.ListTags.length == 0
+                    //           ? Center(
+                    //               child: Text('No tag selected'),
+                    //             )
+                    //           : Material(
+                    //               child: Wrap(
+                    //                   children: controller.ListTags.map(
+                    //                       (element) => Padding(
+                    //                           padding:
+                    //                               const EdgeInsets.symmetric(
+                    //                                   horizontal: 4),
+                    //                           child: Chip(
+                    //                             label: Text(element),
+                    //                             deleteIcon: Icon(Icons.clear),
+                    //                             onDeleted: () =>
+                    //                                 controller.ListTags.remove(
+                    //                                     element),
+                    //                           ))).toList()),
+                    //             ))
+                    //     ],
+                    //   ),
+                    // );
                   } else {
                     // if it's not, navigate to VideoScreen
                     return VideoScreen(videoFile: asset.file);
@@ -203,119 +209,6 @@ class AssetThumbnail extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class ImageScreen extends StatelessWidget {
-  const ImageScreen({
-    Key key,
-    @required this.imageFile,
-  }) : super(key: key);
-
-  final Future<File> imageFile;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          color: Colors.blue,
-          height: 400,
-          alignment: Alignment.center,
-          child: FutureBuilder<File>(
-            future: imageFile,
-            builder: (_, snapshot) {
-              final file = snapshot.data;
-              if (file == null) return Container();
-              return Image.file(file);
-            },
-          ),
-        ),
-        // SizedBox(
-        //   height: 20,
-        // ),
-        // Container(
-        //   color: Colors.pink,
-        //   height: 350,
-        // )
-      ],
-    );
-  }
-}
-
-class VideoScreen extends StatefulWidget {
-  const VideoScreen({
-    Key key,
-    @required this.videoFile,
-  }) : super(key: key);
-
-  final Future<File> videoFile;
-
-  @override
-  _VideoScreenState createState() => _VideoScreenState();
-}
-
-class _VideoScreenState extends State<VideoScreen> {
-  VideoPlayerController _controller;
-  bool initialized = false;
-
-  @override
-  void initState() {
-    _initVideo();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  _initVideo() async {
-    final video = await widget.videoFile;
-    _controller = VideoPlayerController.file(video)
-      // Play the video again when it ends
-      ..setLooping(true)
-      // initialize the controller and notify UI when done
-      ..initialize().then((_) => setState(() => initialized = true));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: initialized
-          // If the video is initialized, display it
-          ? Scaffold(
-              body: Center(
-                child: AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  // Use the VideoPlayer widget to display the video.
-                  child: VideoPlayer(_controller),
-                ),
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  // Wrap the play or pause in a call to `setState`. This ensures the
-                  // correct icon is shown.
-                  setState(() {
-                    // If the video is playing, pause it.
-                    if (_controller.value.isPlaying) {
-                      _controller.pause();
-                    } else {
-                      // If the video is paused, play it.
-                      _controller.play();
-                    }
-                  });
-                },
-                // Display the correct icon depending on the state of the player.
-                child: Icon(
-                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                ),
-              ),
-            )
-          // If the video is not yet initialized, display a spinner
-          : Center(child: CircularProgressIndicator()),
     );
   }
 }
