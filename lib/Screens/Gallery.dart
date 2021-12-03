@@ -10,18 +10,19 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photomaster/Screens/Images_Details.dart';
+import 'package:photomaster/Screens/Tags.dart';
 import 'package:video_player/video_player.dart';
 
-var suggestTag = [
-  "Bird",
-  "Ocean",
-  "Friend",
-  "BestFriend",
-  "Mom",
-  "Dad",
-  "Sibling",
-  "Bestpic"
-];
+// var suggestTag = [
+//   "Bird",
+//   "Ocean",
+//   "Friend",
+//   "BestFriend",
+//   "Mom",
+//   "Dad",
+//   "Sibling",
+//   "Bestpic"
+// ];
 
 class TagStateController extends GetxController {
   var ListTags = List<String>.empty(growable: true).obs;
@@ -74,6 +75,16 @@ class _GalleryScreenState extends State<GalleryScreen> {
         itemBuilder: (_, index) {
           return AssetThumbnail(asset: assets[index]);
         },
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+                title: Text('Your Tags'),
+                trailing: Icon(Icons.payment),
+                onTap: () => Navigator.pushNamed(context, Tags.id)),
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photomaster/Screens/Tags.dart';
 import 'package:photomaster/Screens/home.dart';
 import 'package:photomaster/Screens/gallery.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class Photomaster extends StatelessWidget {
       routes: {
         HomeScreen.id: (context) => HomeScreen(),
         GalleryScreen.id: (context) => GalleryScreen(),
+        Tags.id: (context) => Tags(),
       },
     );
   }
