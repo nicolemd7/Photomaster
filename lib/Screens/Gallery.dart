@@ -11,20 +11,20 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:photomaster/Screens/Images_Details.dart';
+import 'package:photomaster/Screens/Tags.dart';
 import 'package:video_player/video_player.dart';
 
-import 'Images_Details.dart';
-
-var suggestTag = [
-  "Bird",
-  "Ocean",
-  "Friend",
-  "BestFriend",
-  "Mom",
-  "Dad",
-  "Sibling",
-  "Bestpic"
-];
+// var suggestTag = [
+//   "Bird",
+//   "Ocean",
+//   "Friend",
+//   "BestFriend",
+//   "Mom",
+//   "Dad",
+//   "Sibling",
+//   "Bestpic"
+// ];
 
 class TagStateController extends GetxController {
   var ListTags = List<String>.empty(growable: true).obs;
@@ -88,6 +88,16 @@ class _GalleryScreenState extends State<GalleryScreen> {
           return AssetThumbnail(asset: assets[index]);
         },
       ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+                title: Text('Your Tags'),
+                trailing: Icon(Icons.payment),
+                onTap: () => Navigator.pushNamed(context, Tags.id)),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -127,68 +137,51 @@ class AssetThumbnail extends StatelessWidget {
                       img_tags: "abc",
                     );
                     // If this is an image, navigate to ImageScreen
+
                     // return Flexible(
                     //   child: Column(
                     //     children: [
                     //       ImageScreen(imageFile: asset.file),
                     //       Material(
-                    //           child: Padding(
-                    //         padding: const EdgeInsets.all(8),
-                    //         child: TypeAheadField(
-                    //           textFieldConfiguration: TextFieldConfiguration(
-                    //               controller: textController,
-                    //               onEditingComplete: () {
-                    //                 controller.ListTags.add(
-                    //                     textController.text);
-                    //                 textController.clear();
-                    //               },
-                    //               autofocus: false,
-                    //               style: DefaultTextStyle.of(context)
-                    //                   .style
-                    //                   .copyWith(
-                    //                       fontSize: 20,
-                    //                       fontStyle: FontStyle.normal),
-                    //               decoration: InputDecoration(
-                    //                   border: OutlineInputBorder(),
-                    //                   hintText: 'Select or Enter a Tag')),
-                    //           suggestionsCallback: (String pattern) {
-                    //             return suggestTag.where((e) => e
-                    //                 .toLowerCase()
-                    //                 .contains(pattern.toLowerCase()));
-                    //           },
-                    //           onSuggestionSelected: (String suggestion) =>
-                    //               controller.ListTags.add(suggestion),
-                    //           itemBuilder:
-                    //               (BuildContext context, String itemData) {
-                    //             return ListTile(
-                    //               leading: Icon(Icons.tag),
-                    //               title: Text(itemData),
-                    //             );
-                    //           },
+
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.all(8),
+                    //           child: TypeAheadField(
+                    //             textFieldConfiguration: TextFieldConfiguration(
+                    //                 controller: textController,
+                    //                 onEditingComplete: () {
+                    //                   controller.ListTags.add(
+                    //                       textController.text);
+                    //                   textController.clear();
+                    //                 },
+                    //                 autofocus: false,
+                    //                 style: DefaultTextStyle.of(context)
+                    //                     .style
+                    //                     .copyWith(
+                    //                         fontSize: 20,
+                    //                         fontStyle: FontStyle.normal),
+                    //                 decoration: InputDecoration(
+                    //                     border: OutlineInputBorder(),
+                    //                     hintText: 'Select or Enter a Tag')),
+                    //             suggestionsCallback: (String pattern) {
+                    //               return suggestTag.where((e) => e
+                    //                   .toLowerCase()
+                    //                   .contains(pattern.toLowerCase()));
+                    //             },
+                    //             onSuggestionSelected: (String suggestion) =>
+                    //                 controller.ListTags.add(suggestion),
+                    //             itemBuilder:
+                    //                 (BuildContext context, String itemData) {
+                    //               return ListTile(
+                    //                 leading: Icon(Icons.tag),
+                    //                 title: Text(itemData),
+                    //               );
+                    //             },
+                    //           ),
                     //         ),
-                    //       )),
-                    //       SizedBox(
-                    //         height: 10,
                     //       ),
-                    //       Obx(() => controller.ListTags.length == 0
-                    //           ? Center(
+
                     //               child: Text(""),
-                    //             )
-                    //           : Material(
-                    //               child: Wrap(
-                    //                   children: controller.ListTags.map(
-                    //                       (element) => Padding(
-                    //                           padding:
-                    //                               const EdgeInsets.symmetric(
-                    //                                   horizontal: 4),
-                    //                           child: Chip(
-                    //                             label: Text(element),
-                    //                             deleteIcon: Icon(Icons.clear),
-                    //                             onDeleted: () =>
-                    //                                 controller.ListTags.remove(
-                    //                                     element),
-                    //                           ))).toList()),
-                    //             )),
                     //     ],
                     //   ),
                     // );
