@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -10,6 +12,8 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_player/video_player.dart';
+
+import 'Images_Details.dart';
 
 var suggestTag = [
   "Bird",
@@ -62,15 +66,25 @@ class _GalleryScreenState extends State<GalleryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gallery'),
+        backgroundColor: Colors.blueGrey[900],
+        title: Text(
+          'Gallery',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: GridView.builder(
+        primary: false,
+        padding: const EdgeInsets.all(20),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           // A grid view with 3 items per row
-          crossAxisCount: 3,
+          crossAxisCount: 2,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          childAspectRatio: MediaQuery.of(context).size.width /
+              (MediaQuery.of(context).size.height / 2),
         ),
         itemCount: assets.length,
-        itemBuilder: (_, index) {
+        itemBuilder: (BuildContext context, index) {
           return AssetThumbnail(asset: assets[index]);
         },
       ),
@@ -89,6 +103,7 @@ class AssetThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // We're using a FutureBuilder since thumbData is a future
+
     final controller = Get.put(TagStateController());
     final textController = TextEditingController();
     return FutureBuilder<Uint8List>(
@@ -106,73 +121,77 @@ class AssetThumbnail extends StatelessWidget {
               MaterialPageRoute(
                 builder: (_) {
                   if (asset.type == AssetType.image) {
-                    // If this is an image, navigate to ImageScreen
-                    return Flexible(
-                      child: Column(
-                        children: [
-                          ImageScreen(imageFile: asset.file),
-                          Material(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: TypeAheadField(
-                                textFieldConfiguration: TextFieldConfiguration(
-                                    controller: textController,
-                                    onEditingComplete: () {
-                                      controller.ListTags.add(
-                                          textController.text);
-                                      textController.clear();
-                                    },
-                                    autofocus: false,
-                                    style: DefaultTextStyle.of(context)
-                                        .style
-                                        .copyWith(
-                                            fontSize: 20,
-                                            fontStyle: FontStyle.normal),
-                                    decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: 'Select or Enter a Tag')),
-                                suggestionsCallback: (String pattern) {
-                                  return suggestTag.where((e) => e
-                                      .toLowerCase()
-                                      .contains(pattern.toLowerCase()));
-                                },
-                                onSuggestionSelected: (String suggestion) =>
-                                    controller.ListTags.add(suggestion),
-                                itemBuilder:
-                                    (BuildContext context, String itemData) {
-                                  return ListTile(
-                                    leading: Icon(Icons.tag),
-                                    title: Text(itemData),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Obx(() => controller.ListTags.length == 0
-                              ? Center(
-                                  child: Text('No tag selected'),
-                                )
-                              : Material(
-                                  child: Wrap(
-                                      children: controller.ListTags.map(
-                                          (element) => Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4),
-                                              child: Chip(
-                                                label: Text(element),
-                                                deleteIcon: Icon(Icons.clear),
-                                                onDeleted: () =>
-                                                    controller.ListTags.remove(
-                                                        element),
-                                              ))).toList()),
-                                ))
-                        ],
-                      ),
+                    return ImageDetails(
+                      img: asset.file,
+                      img_path: asset.relativePath + asset.title,
+                      img_tags: "abc",
                     );
+                    // If this is an image, navigate to ImageScreen
+                    // return Flexible(
+                    //   child: Column(
+                    //     children: [
+                    //       ImageScreen(imageFile: asset.file),
+                    //       Material(
+                    //           child: Padding(
+                    //         padding: const EdgeInsets.all(8),
+                    //         child: TypeAheadField(
+                    //           textFieldConfiguration: TextFieldConfiguration(
+                    //               controller: textController,
+                    //               onEditingComplete: () {
+                    //                 controller.ListTags.add(
+                    //                     textController.text);
+                    //                 textController.clear();
+                    //               },
+                    //               autofocus: false,
+                    //               style: DefaultTextStyle.of(context)
+                    //                   .style
+                    //                   .copyWith(
+                    //                       fontSize: 20,
+                    //                       fontStyle: FontStyle.normal),
+                    //               decoration: InputDecoration(
+                    //                   border: OutlineInputBorder(),
+                    //                   hintText: 'Select or Enter a Tag')),
+                    //           suggestionsCallback: (String pattern) {
+                    //             return suggestTag.where((e) => e
+                    //                 .toLowerCase()
+                    //                 .contains(pattern.toLowerCase()));
+                    //           },
+                    //           onSuggestionSelected: (String suggestion) =>
+                    //               controller.ListTags.add(suggestion),
+                    //           itemBuilder:
+                    //               (BuildContext context, String itemData) {
+                    //             return ListTile(
+                    //               leading: Icon(Icons.tag),
+                    //               title: Text(itemData),
+                    //             );
+                    //           },
+                    //         ),
+                    //       )),
+                    //       SizedBox(
+                    //         height: 10,
+                    //       ),
+                    //       Obx(() => controller.ListTags.length == 0
+                    //           ? Center(
+                    //               child: Text(""),
+                    //             )
+                    //           : Material(
+                    //               child: Wrap(
+                    //                   children: controller.ListTags.map(
+                    //                       (element) => Padding(
+                    //                           padding:
+                    //                               const EdgeInsets.symmetric(
+                    //                                   horizontal: 4),
+                    //                           child: Chip(
+                    //                             label: Text(element),
+                    //                             deleteIcon: Icon(Icons.clear),
+                    //                             onDeleted: () =>
+                    //                                 controller.ListTags.remove(
+                    //                                     element),
+                    //                           ))).toList()),
+                    //             )),
+                    //     ],
+                    //   ),
+                    // );
                   } else {
                     // if it's not, navigate to VideoScreen
                     return VideoScreen(videoFile: asset.file);
@@ -219,7 +238,7 @@ class ImageScreen extends StatelessWidget {
     return Column(
       children: [
         Container(
-          color: Colors.blue,
+          color: Colors.grey,
           height: 400,
           alignment: Alignment.center,
           child: FutureBuilder<File>(
@@ -236,7 +255,7 @@ class ImageScreen extends StatelessWidget {
         // ),
         // Container(
         //   color: Colors.pink,
-        //   height: 350,
+        //   height: 50,
         // )
       ],
     );
