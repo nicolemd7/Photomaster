@@ -32,6 +32,7 @@ dependencies:
   provider: ^6.0.1
   flutter_typeahead: any
   get: any
+  path_provider: ^2.0.7
 
 dev_dependencies:
   flutter_test:
