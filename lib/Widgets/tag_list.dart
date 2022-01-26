@@ -12,6 +12,8 @@ class TagList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
           itemCount: tags.length,
           itemBuilder: (context, index) {
             return SingleChildScrollView(

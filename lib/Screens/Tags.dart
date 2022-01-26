@@ -33,6 +33,7 @@ class _TagsState extends State<Tags> {
                   decoration: InputDecoration(hintText: "Enter a new tag"),
                   onChanged: (val) {
                     tagname = val ?? null;
+                    print("YELLLLOWWW");
                     print(tagname);
                   },
                 ),
@@ -41,6 +42,7 @@ class _TagsState extends State<Tags> {
                     if (_formKey.currentState.validate()) {
                       final tag = Tag(name: tagname);
                       tagsOperations.createTag(tag);
+                      print("TAG CREATED");
                     }
                   },
                   child: Text("Submit"),
