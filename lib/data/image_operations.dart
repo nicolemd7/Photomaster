@@ -1,4 +1,4 @@
-import 'package:photomaster/data/database.dart';
+import 'database.dart';
 import 'package:photomaster/models/image.dart';
 import 'package:photomaster/models/tags.dart';
 
@@ -9,24 +9,25 @@ class ImageOperations {
 
   createImage(Image image) async {
     final db = await dbProvider.database;
-    db.insert('image', image.toMap());
-    print('image inserted');
+    var res = db.insert('images', image.toMap());
+    return res;
   }
 
   updateImage(Image image) async {
     final db = await dbProvider.database;
-    db.update('image', image.toMap(),
+    var res = db.update('images', image.toMap(),
         where: "imageId=?", whereArgs: [image.id]);
+    return res;
   }
 
   deleteImage(Image image) async {
     final db = await dbProvider.database;
-    await db.delete('image', where: 'imageId=?', whereArgs: [image.id]);
+    await db.delete('images', where: 'imageId=?', whereArgs: [image.id]);
   }
 
   Future<List<Image>> getAllImages() async {
     final db = await dbProvider.database;
-    List<Map<String, dynamic>> allRows = await db.query('image');
+    List<Map<String, dynamic>> allRows = await db.query('images');
     List<Image> images = allRows.map((image) => Image.fromMap(image)).toList();
     return images;
   }
@@ -34,8 +35,8 @@ class ImageOperations {
   Future<List<Image>> getAllImagesByTags(Tag tag) async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> allRows = await db.rawQuery('''
-    SELECT * FROM contact 
-    WHERE image.FK_image_tags = ${tag.id}
+    SELECT * FROM images
+    WHERE image.FK_image_tags = tagId
     ''');
     List<Image> images = allRows.map((image) => Image.fromMap(image)).toList();
     return images;

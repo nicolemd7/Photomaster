@@ -1,51 +1,47 @@
 import 'dart:io';
-import 'package:sqflite/sqflite.dart';
+import 'package:photomaster/models/image.dart';
+import 'package:photomaster/models/tags.dart';
+import 'package:sqflite/sqflite.dart' show Database, openDatabase;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class DatabaseRepository {
-  DatabaseRepository.privateConstructor();
+  DatabaseRepository._();
 
-  static final DatabaseRepository instance =
-      DatabaseRepository.privateConstructor();
+  static final DatabaseRepository instance = DatabaseRepository._();
 
-  final _databaseName = 'image_details.db';
+  static const _databaseName = 'img_deets.db';
 
   final _databaseVersion = 1;
 
   static Database _database;
 
   Future<Database> get database async {
-    if (_database != null) {
-      return _database;
-    } else {
-      _database = await _initDatabase();
-    }
+    if (_database != null) return _database;
+
+    _database = await initDatabase();
+    return _database;
   }
 
-  _initDatabase() async {
+  initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    print("YOU HAVE REACHED DB CREATION");
+    print("db location " + documentsDirectory.path);
     String path = join(documentsDirectory.path, _databaseName);
-    return await openDatabase(path,
-        version: _databaseVersion, onCreate: await onCreate);
-  }
+    return await openDatabase(path, version: _databaseVersion, onOpen: (db) {},
+        onCreate: (Database db, int version) async {
+      await db.execute("CREATE TABLE IF NOT EXISTS images("
+          "imageId INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "imagePath STRING NOT NULL,"
+          "FK_image_tags INTEGER NOT NULL,"
+          "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId) "
+          ");");
 
-  Future onCreate(Database db, int version) async {
-    await db.execute('''
-          CREATE TABLE image (
-            imageId INTEGER PRIMARY KEY AUTOINCREMENT,
-            imagePath STRING NOT NULL,
-            FK_image_tags INT NOT NULL,
-            FOREIGN KEY (FK_image_tags) REFERENCES category (tagId) 
-            
-          )
-          ''');
-
-    await db.execute('''
-          CREATE TABLE tags (
-            tagId INTEGER PRIMARY KEY AUTOINCREMENT,
-            tagName STRING NOT NULL
-          )
-          ''');
+      await db.execute("CREATE TABLE IF NOT EXISTS tager("
+          " tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "tagName STRING NOT NULL"
+          "  );");
+      print("TB CREATED");
+    });
   }
 }

@@ -1,3 +1,11 @@
+final String Tableimage = 'images';
+
+class ImageFields {
+  static int id;
+  static String path;
+  static int tag;
+}
+
 class Image {
   int id;
   String path;

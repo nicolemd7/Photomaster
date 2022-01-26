@@ -8,12 +8,12 @@ class TagsOperations {
 
   createTag(Tag tag) async {
     final db = await dbProvider.database;
-    db.insert('tag', tag.toMap());
+    db.insert('tager', tag.toMap());
   }
 
   Future<List<Tag>> getAllTags() async {
     final db = await dbProvider.database;
-    List<Map<String, dynamic>> allRows = await db.query('tag');
+    List<Map<String, dynamic>> allRows = await db.query('tager');
     List<Tag> tags = allRows.map((tag) => Tag.fromMap(tag)).toList();
     return tags;
   }
