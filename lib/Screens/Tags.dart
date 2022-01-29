@@ -50,19 +50,21 @@ class _TagsState extends State<Tags> {
               ],
             ),
           ),
-          SingleChildScrollView(
-            child: Center(
-              child: FutureBuilder(
-                  future: tagsOperations.getAllTags(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      print("error");
-                    }
-                    var data = snapshot.data;
-                    return snapshot.hasData
-                        ? TagList(data)
-                        : Center(child: Text("No Tags"));
-                  }),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Center(
+                child: FutureBuilder(
+                    future: tagsOperations.getAllTags(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        print("error");
+                      }
+                      var data = snapshot.data;
+                      return snapshot.hasData
+                          ? TagList(data)
+                          : Center(child: Text("No Tags"));
+                    }),
+              ),
             ),
           ),
         ],

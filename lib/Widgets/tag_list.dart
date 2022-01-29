@@ -10,7 +10,7 @@ class TagList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Expanded(
       child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,

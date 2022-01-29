@@ -39,7 +39,8 @@ class DatabaseRepository {
 
       await db.execute("CREATE TABLE IF NOT EXISTS tager("
           " tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "tagName STRING NOT NULL"
+          "tagName STRING NOT NULL,"
+          "unique(tagName)"
           "  );");
       print("TB CREATED");
     });
