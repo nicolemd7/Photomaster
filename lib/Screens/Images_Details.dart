@@ -21,6 +21,7 @@ class _ImageDetailsState extends State<ImageDetails> {
       body: Container(
         child: Column(
           children: <Widget>[
+            //image fetch
             Expanded(
               child: Hero(
                 tag: 'img',
@@ -49,6 +50,7 @@ class _ImageDetailsState extends State<ImageDetails> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
+                          //Image Tags
                           widget.img_tags,
                           style: TextStyle(
                             color: Colors.lightBlueAccent,
@@ -60,6 +62,7 @@ class _ImageDetailsState extends State<ImageDetails> {
                           height: 10,
                         ),
                         Text(
+                          //Image Path
                           widget.img_path,
                           style: TextStyle(
                             fontSize: 14,

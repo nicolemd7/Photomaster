@@ -32,6 +32,12 @@ class ImageOperations {
     return images;
   }
 
+  //Weird
+  Future<List<Map<String, dynamic>>> getData(image) async {
+    final db = await dbProvider.database;
+    return db.query("imagePath");
+  }
+
   Future<List<Image>> getAllImagesByTags(Tag tag) async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> allRows = await db.rawQuery('''

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:photomaster/data/image_operations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -122,7 +122,7 @@ class AssetThumbnail extends StatelessWidget {
                     // return ImageScreen(imageFile: asset.file);
                     return ImageDetails(
                       img: asset.file,
-                      img_path: "abc",
+                      img_path: " Image path is " + asset.relativePath,
                       img_tags: "abc",
                     );
                     // return Flexible(
