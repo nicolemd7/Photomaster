@@ -14,6 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Photomaster"),
+        backgroundColor: Colors.blueGrey[900],
       ),
       body: Center(
         child: TextButton(

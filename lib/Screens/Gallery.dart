@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:photomaster/albums/main2.dart';
 import 'package:photomaster/data/database.dart';
 import 'package:photomaster/data/image_operations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -67,15 +69,25 @@ class _GalleryScreenState extends State<GalleryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gallery'),
+        backgroundColor: Colors.blueGrey[900],
+        title: Text(
+          'Gallery',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: GridView.builder(
+        primary: false,
+        padding: const EdgeInsets.all(20),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           // A grid view with 3 items per row
-          crossAxisCount: 3,
+          crossAxisCount: 2,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          childAspectRatio: MediaQuery.of(context).size.width /
+              (MediaQuery.of(context).size.height / 2),
         ),
         itemCount: assets.length,
-        itemBuilder: (_, index) {
+        itemBuilder: (BuildContext context, index) {
           return AssetThumbnail(asset: assets[index]);
         },
       ),
@@ -108,6 +120,7 @@ class AssetThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // We're using a FutureBuilder since thumbData is a future
+
     final controller = Get.put(TagStateController());
     final textController = TextEditingController();
     return FutureBuilder<Uint8List>(
@@ -125,18 +138,21 @@ class AssetThumbnail extends StatelessWidget {
               MaterialPageRoute(
                 builder: (_) {
                   if (asset.type == AssetType.image) {
-                    // If this is an image, navigate to ImageScreen
-                    // return ImageScreen(imageFile: asset.file);
                     return ImageDetails(
                       img: asset.file,
                       img_path: " Image path is " + asset.relativePath,
                       //img_tags: "Tags assigned to this image "+tagcreation.dropdown(),
+                      //img_path: asset.relativePath + asset.title,
+                      //img_tags: "abc",
                     );
+                    // If this is an image, navigate to ImageScreen
+
                     // return Flexible(
                     //   child: Column(
                     //     children: [
                     //       ImageScreen(imageFile: asset.file),
                     //       Material(
+
                     //         child: Padding(
                     //           padding: const EdgeInsets.all(8),
                     //           child: TypeAheadField(
@@ -173,28 +189,8 @@ class AssetThumbnail extends StatelessWidget {
                     //           ),
                     //         ),
                     //       ),
-                    //       SizedBox(
-                    //         height: 10,
-                    //       ),
-                    //       Obx(() => controller.ListTags.length == 0
-                    //           ? Center(
-                    //               child: Text('No tag selected'),
-                    //             )
-                    //           : Material(
-                    //               child: Wrap(
-                    //                   children: controller.ListTags.map(
-                    //                       (element) => Padding(
-                    //                           padding:
-                    //                               const EdgeInsets.symmetric(
-                    //                                   horizontal: 4),
-                    //                           child: Chip(
-                    //                             label: Text(element),
-                    //                             deleteIcon: Icon(Icons.clear),
-                    //                             onDeleted: () =>
-                    //                                 controller.ListTags.remove(
-                    //                                     element),
-                    //                           ))).toList()),
-                    //             ))
+
+                    //               child: Text(""),
                     //     ],
                     //   ),
                     // );
@@ -227,6 +223,119 @@ class AssetThumbnail extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class ImageScreen extends StatelessWidget {
+  const ImageScreen({
+    Key key,
+    @required this.imageFile,
+  }) : super(key: key);
+
+  final Future<File> imageFile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          color: Colors.grey,
+          height: 400,
+          alignment: Alignment.center,
+          child: FutureBuilder<File>(
+            future: imageFile,
+            builder: (_, snapshot) {
+              final file = snapshot.data;
+              if (file == null) return Container();
+              return Image.file(file);
+            },
+          ),
+        ),
+        // SizedBox(
+        //   height: 20,
+        // ),
+        // Container(
+        //   color: Colors.pink,
+        //   height: 50,
+        // )
+      ],
+    );
+  }
+}
+
+class VideoScreen extends StatefulWidget {
+  const VideoScreen({
+    Key key,
+    @required this.videoFile,
+  }) : super(key: key);
+
+  final Future<File> videoFile;
+
+  @override
+  _VideoScreenState createState() => _VideoScreenState();
+}
+
+class _VideoScreenState extends State<VideoScreen> {
+  VideoPlayerController _controller;
+  bool initialized = false;
+
+  @override
+  void initState() {
+    _initVideo();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  _initVideo() async {
+    final video = await widget.videoFile;
+    _controller = VideoPlayerController.file(video)
+      // Play the video again when it ends
+      ..setLooping(true)
+      // initialize the controller and notify UI when done
+      ..initialize().then((_) => setState(() => initialized = true));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: initialized
+          // If the video is initialized, display it
+          ? Scaffold(
+              body: Center(
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  // Use the VideoPlayer widget to display the video.
+                  child: VideoPlayer(_controller),
+                ),
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  // Wrap the play or pause in a call to `setState`. This ensures the
+                  // correct icon is shown.
+                  setState(() {
+                    // If the video is playing, pause it.
+                    if (_controller.value.isPlaying) {
+                      _controller.pause();
+                    } else {
+                      // If the video is paused, play it.
+                      _controller.play();
+                    }
+                  });
+                },
+                // Display the correct icon depending on the state of the player.
+                child: Icon(
+                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                ),
+              ),
+            )
+          // If the video is not yet initialized, display a spinner
+          : Center(child: CircularProgressIndicator()),
     );
   }
 }

@@ -39,7 +39,8 @@ class _ImageDetailsState extends State<ImageDetails> {
               ),
             ),
             Container(
-              height: 260,
+              color: Colors.pink,
+              height: 360,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,8 +79,8 @@ class _ImageDetailsState extends State<ImageDetails> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          padding: EdgeInsets.symmetric(vertical: 15),
-                          color: Colors.lightBlueAccent,
+                          padding: EdgeInsets.symmetric(vertical: 18),
+                          color: Colors.blueGrey[900],
                           child: Text(
                             'Back',
                             style: TextStyle(
@@ -113,8 +114,15 @@ class ImageScreen extends StatelessWidget {
     return Column(
       children: [
         Container(
-          color: Colors.blue,
+          //color: Colors.blueGrey[900],
           height: 400,
+          decoration: BoxDecoration(
+            color: Colors.blueGrey[900],
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(38)),
+          ),
+
           alignment: Alignment.center,
           child: FutureBuilder<File>(
             future: imageFile,
@@ -213,55 +221,106 @@ class _VideoScreenState extends State<VideoScreen> {
   }
 }
 
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text("Photomaster"),
-    //   ),
-    //   body: ListView(
-    //     children: <Widget>[
-    //       Container(
-    //         height: 300.0,
-    //         child: GridTile(
-    //           child: ImageScreen(
-    //             imageFile: widget.img,
-    //           ),
-    //           footer: GridTile(
-    //             child: Container(
-    //                 color: Colors.white70,
-    //                 child: ListTile(
-    //                   leading: Text(
-    //                     widget.img_path,
-    //                     style: TextStyle(
-    //                       fontWeight: FontWeight.bold,
-    //                       fontSize: 16.0,
-    //                     ),
-    //                   ),
-    //                   title: Row(
-    //                     children: <Widget>[
-    //                       Expanded(
-    //                         child: Text(
-    //                           widget.img_tags,
-    //                           style: TextStyle(
-    //                             fontWeight: FontWeight.w600,
-    //                             color: Colors.grey,
-    //                           ),
-    //                         ),
-    //                       ),
-    //                       // Expanded(
-    //                       //   child: Text(
-    //                       //     "\$" + widget.product.price.toString(),
-    //                       //     style: TextStyle(
-    //                       //       fontWeight: FontWeight.bold,
-    //                       //       color: Colors.red,
-    //                       //     ),
-    //                       //   ),
-    //                       // ),
-    //                     ],
-    //                   ),
-    //                 )),
-    //           ),
-    //         ),
-    //       ),
+// return Scaffold(
+//   appBar: AppBar(
+//     title: Text("Photomaster"),
+//   ),
+//   body: ListView(
+//     children: <Widget>[
+//       Container(
+//         height: 300.0,
+//         child: GridTile(
+//           child: ImageScreen(
+//             imageFile: widget.img,
+//           ),
+//           footer: GridTile(
+//             child: Container(
+//                 color: Colors.white70,
+//                 child: ListTile(
+//                   leading: Text(
+//                     widget.img_path,
+//                     style: TextStyle(
+//                       fontWeight: FontWeight.bold,
+//                       fontSize: 16.0,
+//                     ),
+//                   ),
+//                   title: Row(
+//                     children: <Widget>[
+//                       Expanded(
+//                         child: Text(
+//                           widget.img_tags,
+//                           style: TextStyle(
+//                             fontWeight: FontWeight.w600,
+//                             color: Colors.grey,
+//                           ),
+//                         ),
+//                       ),
+//                       // Expanded(
+//                       //   child: Text(
+//                       //     "\$" + widget.product.price.toString(),
+//                       //     style: TextStyle(
+//                       //       fontWeight: FontWeight.bold,
+//                       //       color: Colors.red,
+//                       //     ),
+//                       //   ),
+//                       // ),
+//                     ],
+//                   ),
+//                 )),
+//           ),
+//         ),
+//       ),
+
+// return Scaffold(
+//   appBar: AppBar(
+//     title: Text("Photomaster"),
+//   ),
+//   body: ListView(
+//     children: <Widget>[
+//       Container(
+//         height: 300.0,
+//         child: GridTile(
+//           child: ImageScreen(
+//             imageFile: widget.img,
+//           ),
+//           footer: GridTile(
+//             child: Container(
+//                 color: Colors.white70,
+//                 child: ListTile(
+//                   leading: Text(
+//                     widget.img_path,
+//                     style: TextStyle(
+//                       fontWeight: FontWeight.bold,
+//                       fontSize: 16.0,
+//                     ),
+//                   ),
+//                   title: Row(
+//                     children: <Widget>[
+//                       Expanded(
+//                         child: Text(
+//                           widget.img_tags,
+//                           style: TextStyle(
+//                             fontWeight: FontWeight.w600,
+//                             color: Colors.grey,
+//                           ),
+//                         ),
+//                       ),
+//                       // Expanded(
+//                       //   child: Text(
+//                       //     "\$" + widget.product.price.toString(),
+//                       //     style: TextStyle(
+//                       //       fontWeight: FontWeight.bold,
+//                       //       color: Colors.red,
+//                       //     ),
+//                       //   ),
+//                       // ),
+//                     ],
+//                   ),
+//                 )),
+//           ),
+//         ),
+//       ),
+
 //           Row(
 //             children: <Widget>[
 //               //First row of buttons
@@ -426,155 +485,303 @@ class _VideoScreenState extends State<VideoScreen> {
 // //              ),
 //             ],
 //           ),
-          //Second row of buttons
-          // Row(
-          //   children: <Widget>[
-          //     Expanded(
-          //       child: MaterialButton(
-          //         color: Colors.red,
-          //         onPressed: () {},
-          //         textColor: Colors.white,
-          //         child: Text('Buy Now'),
-          //       ),
-          //     ),
-          //     IconButton(
-          //       onPressed: () async {
-          //         //TODO: add to cart logic
-          //         appProvider.changeIsLoading();
-          //         bool success = await user.addToCart(
-          //             product: widget.product, size: _size, color: _color);
-          //         if (success) {
-          //           _key.currentState.showSnackBar(SnackBar(
-          //             content: Text("Added to Cart!"), //
-          //           ));
-          //           user.reloadUserModel();
-          //           appProvider.changeIsLoading();
-          //           return;
-          //         } else {
-          //           _key.currentState.showSnackBar(SnackBar(
-          //             content: Text("Added to Cart!"),
-          //           ));
-          //           appProvider.changeIsLoading();
-          //           return;
-          //         }
-          //       },
-          //       icon: Icon(
-          //         Icons.add_shopping_cart,
-          //         color: Colors.red,
-          //       ),
-          //     ),
-          //     IconButton(
-          //       onPressed: () {
-          //         if (like) {
-          //           setState(() {
-          //             like = false;
-          //             _favourite.createFav(like);
-          //           });
-          //         } else {
-          //           setState(() {
-          //             like = true;
-          //             _favourite.createFav(like);
-          //           });
-          //         }
-          //       },
-          //       icon: Icon(
-          //         like ? Icons.favorite : Icons.favorite_border,
-          //         color: Colors.red,
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // Divider(),
-          // ListTile(
-          //   title: Text('Product Details'),
-          //   subtitle: Text(widget.product.description),
-          // ),
-          // Divider(),
-          // Row(
-          //   children: <Widget>[
-          //     Padding(
-          //       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-          //       child: Text(
-          //         'Product Name',
-          //         style: TextStyle(color: Colors.grey),
-          //       ),
-          //     ),
-          //     Padding(
-          //       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-          //       child: Text(
-          //         widget.product.name,
-          //         style: TextStyle(color: Colors.black),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // Row(
-          //   children: <Widget>[
-          //     Padding(
-          //       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-          //       child: Text(
-          //         'Product Brand',
-          //         style: TextStyle(color: Colors.grey),
-          //       ),
-          //     ),
-          //     Padding(
-          //       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-          //       child: Text(
-          //         widget.product.brand,
-          //         style: TextStyle(color: Colors.black),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // Row(
-          //   children: <Widget>[
-          //     Padding(
-          //       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-          //       child: Text(
-          //         'Product Condition',
-          //         style: TextStyle(color: Colors.grey),
-          //       ),
-          //     ),
-          //     Padding(
-          //       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-          //       child: Text(
-          //         'NEW',
-          //         style: TextStyle(color: Colors.black),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // Row(
-          //   children: <Widget>[
-          //     Padding(
-          //       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-          //       child: Text(
-          //         'Product Quantity Available',
-          //         style: TextStyle(color: Colors.grey),
-          //       ),
-          //     ),
-          //     Padding(
-          //       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-          //       child: Text(
-          //         widget.product.quantity.toString(),
-          //         style: TextStyle(color: Colors.black),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // Divider(),
-          // Padding(
-          //   padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-          //   child: Text('Featured Products'),
-          // ),
-          // //Similar Products
-          // Container(
-          //   height: 360.0,
-          //   child: Similar_Products(),
-          // ),
+
+//Second row of buttons
+// Row(
+//   children: <Widget>[
+//     Expanded(
+//       child: MaterialButton(
+//         color: Colors.red,
+//         onPressed: () {},
+//         textColor: Colors.white,
+//         child: Text('Buy Now'),
+//       ),
+//     ),
+//     IconButton(
+//       onPressed: () async {
+//         //TODO: add to cart logic
+//         appProvider.changeIsLoading();
+//         bool success = await user.addToCart(
+//             product: widget.product, size: _size, color: _color);
+//         if (success) {
+//           _key.currentState.showSnackBar(SnackBar(
+//             content: Text("Added to Cart!"), //
+//           ));
+//           user.reloadUserModel();
+//           appProvider.changeIsLoading();
+//           return;
+//         } else {
+//           _key.currentState.showSnackBar(SnackBar(
+//             content: Text("Added to Cart!"),
+//           ));
+//           appProvider.changeIsLoading();
+//           return;
+//         }
+//       },
+//       icon: Icon(
+//         Icons.add_shopping_cart,
+//         color: Colors.red,
+//       ),
+//     ),
+//     IconButton(
+//       onPressed: () {
+//         if (like) {
+//           setState(() {
+//             like = false;
+//             _favourite.createFav(like);
+//           });
+//         } else {
+//           setState(() {
+//             like = true;
+//             _favourite.createFav(like);
+//           });
+//         }
+//       },
+//       icon: Icon(
+//         like ? Icons.favorite : Icons.favorite_border,
+//         color: Colors.red,
+//       ),
+//     ),
+//   ],
+// ),
+// Divider(),
+// ListTile(
+//   title: Text('Product Details'),
+//   subtitle: Text(widget.product.description),
+// ),
+// Divider(),
+// Row(
+//   children: <Widget>[
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'Product Name',
+//         style: TextStyle(color: Colors.grey),
+//       ),
+//     ),
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         widget.product.name,
+//         style: TextStyle(color: Colors.black),
+//       ),
+//     ),
+//   ],
+// ),
+// Row(
+//   children: <Widget>[
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'Product Brand',
+//         style: TextStyle(color: Colors.grey),
+//       ),
+//     ),
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         widget.product.brand,
+//         style: TextStyle(color: Colors.black),
+//       ),
+//     ),
+//   ],
+// ),
+// Row(
+//   children: <Widget>[
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'Product Condition',
+//         style: TextStyle(color: Colors.grey),
+//       ),
+//     ),
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'NEW',
+//         style: TextStyle(color: Colors.black),
+//       ),
+//     ),
+//   ],
+// ),
+// Row(
+//   children: <Widget>[
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'Product Quantity Available',
+//         style: TextStyle(color: Colors.grey),
+//       ),
+//     ),
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         widget.product.quantity.toString(),
+//         style: TextStyle(color: Colors.black),
+//       ),
+//     ),
+//   ],
+// ),
+// Divider(),
+// Padding(
+//   padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//   child: Text('Featured Products'),
+// ),
+// //Similar Products
+// Container(
+//   height: 360.0,
+//   child: Similar_Products(),
+// ),
+
+//Second row of buttons
+// Row(
+//   children: <Widget>[
+//     Expanded(
+//       child: MaterialButton(
+//         color: Colors.red,
+//         onPressed: () {},
+//         textColor: Colors.white,
+//         child: Text('Buy Now'),
+//       ),
+//     ),
+//     IconButton(
+//       onPressed: () async {
+//         //TODO: add to cart logic
+//         appProvider.changeIsLoading();
+//         bool success = await user.addToCart(
+//             product: widget.product, size: _size, color: _color);
+//         if (success) {
+//           _key.currentState.showSnackBar(SnackBar(
+//             content: Text("Added to Cart!"), //
+//           ));
+//           user.reloadUserModel();
+//           appProvider.changeIsLoading();
+//           return;
+//         } else {
+//           _key.currentState.showSnackBar(SnackBar(
+//             content: Text("Added to Cart!"),
+//           ));
+//           appProvider.changeIsLoading();
+//           return;
+//         }
+//       },
+//       icon: Icon(
+//         Icons.add_shopping_cart,
+//         color: Colors.red,
+//       ),
+//     ),
+//     IconButton(
+//       onPressed: () {
+//         if (like) {
+//           setState(() {
+//             like = false;
+//             _favourite.createFav(like);
+//           });
+//         } else {
+//           setState(() {
+//             like = true;
+//             _favourite.createFav(like);
+//           });
+//         }
+//       },
+//       icon: Icon(
+//         like ? Icons.favorite : Icons.favorite_border,
+//         color: Colors.red,
+//       ),
+//     ),
+//   ],
+// ),
+// Divider(),
+// ListTile(
+//   title: Text('Product Details'),
+//   subtitle: Text(widget.product.description),
+// ),
+// Divider(),
+// Row(
+//   children: <Widget>[
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'Product Name',
+//         style: TextStyle(color: Colors.grey),
+//       ),
+//     ),
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         widget.product.name,
+//         style: TextStyle(color: Colors.black),
+//       ),
+//     ),
+//   ],
+// ),
+// Row(
+//   children: <Widget>[
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'Product Brand',
+//         style: TextStyle(color: Colors.grey),
+//       ),
+//     ),
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         widget.product.brand,
+//         style: TextStyle(color: Colors.black),
+//       ),
+//     ),
+//   ],
+// ),
+// Row(
+//   children: <Widget>[
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'Product Condition',
+//         style: TextStyle(color: Colors.grey),
+//       ),
+//     ),
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'NEW',
+//         style: TextStyle(color: Colors.black),
+//       ),
+//     ),
+//   ],
+// ),
+// Row(
+//   children: <Widget>[
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         'Product Quantity Available',
+//         style: TextStyle(color: Colors.grey),
+//       ),
+//     ),
+//     Padding(
+//       padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//       child: Text(
+//         widget.product.quantity.toString(),
+//         style: TextStyle(color: Colors.black),
+//       ),
+//     ),
+//   ],
+// ),
+// Divider(),
+// Padding(
+//   padding: EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
+//   child: Text('Featured Products'),
+// ),
+// //Similar Products
+// Container(
+//   height: 360.0,
+//   child: Similar_Products(),
+// ),
+
 //         ],
 //       ),
 //     );
 //   }
 // }
-

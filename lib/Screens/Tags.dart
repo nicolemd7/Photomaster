@@ -31,6 +31,9 @@ class _TagsState extends State<Tags> {
                 TextFormField(
                   autofocus: true,
                   decoration: InputDecoration(hintText: "Enter a new tag"),
+                  validator: (val) {
+                    val.isEmpty ? "Enter question" : null;
+                  },
                   onChanged: (val) {
                     tagname = val ?? null;
                     print("YELLLLOWWW");
