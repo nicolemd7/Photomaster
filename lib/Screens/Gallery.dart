@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:photomaster/albums/main2.dart';
+import 'package:photomaster/data/database.dart';
 import 'package:photomaster/data/image_operations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -11,6 +13,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photomaster/Screens/Images_Details.dart';
 import 'package:photomaster/Screens/Tags.dart';
+import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
 
 // var suggestTag = [
@@ -83,6 +86,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 title: Text('Your Tags'),
                 trailing: Icon(Icons.payment),
                 onTap: () => Navigator.pushNamed(context, Tags.id)),
+            ListTile(
+                title: Text('My Albums'),
+                trailing: Icon(Icons.payment),
+                onTap: () => Navigator.pushNamed(context, Main2.id))
           ],
         ),
       ),
@@ -123,7 +130,7 @@ class AssetThumbnail extends StatelessWidget {
                     return ImageDetails(
                       img: asset.file,
                       img_path: " Image path is " + asset.relativePath,
-                      img_tags: "abc",
+                      //img_tags: "Tags assigned to this image "+tagcreation.dropdown(),
                     );
                     // return Flexible(
                     //   child: Column(

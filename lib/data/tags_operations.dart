@@ -1,5 +1,7 @@
 import 'package:photomaster/data/database.dart';
 import 'package:photomaster/models/tags.dart';
+import 'database.dart';
+import 'package:photomaster/models/image.dart';
 
 class TagsOperations {
   TagsOperations tagsOperations;
@@ -9,6 +11,12 @@ class TagsOperations {
   createTag(Tag tag) async {
     final db = await dbProvider.database;
     db.insert('tager', tag.toMap());
+  }
+
+  assignTag(Image image) async {
+    final db = await dbProvider.database;
+    var res = db.update('images', image.toMap(),
+        where: "FK_image_tags=?", whereArgs: [image.tag]);
   }
 
   Future<List<Tag>> getAllTags() async {
