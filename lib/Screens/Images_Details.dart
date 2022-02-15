@@ -24,77 +24,69 @@ class _ImageDetailsState extends State<ImageDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            //image fetch
-            Expanded(
-              child: Hero(
-                tag: 'img',
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              //image fetch
+              Expanded(
+                child: Hero(
+                  tag: 'img',
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
                     ),
-                  ),
-                  child: ImageScreen(
-                    imageFile: widget.img,
+                    child: ImageScreen(
+                      imageFile: widget.img,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              color: Colors.white,
-              height: 360,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    height: 305,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          //Image Path
-                          widget.img_path,
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                        widget.img_tags,
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            padding: EdgeInsets.symmetric(vertical: 18),
-                            color: Colors.blueGrey[900],
-                            child: Text(
-                              'Back',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+              SizedBox(
+                height: 10,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:20.0),
+                child: Text(
+                  //Image Path
+                  widget.img_path,
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 20.0), child: widget.img_tags),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        padding: EdgeInsets.symmetric(vertical: 18),
+                        color: Colors.blueGrey[900],
+                        child: Text(
+                          'Back',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -115,13 +107,8 @@ class ImageScreen extends StatelessWidget {
       children: [
         Container(
           //color: Colors.blueGrey[900],
-          height: 400,
-          decoration: BoxDecoration(
-            color: Colors.blueGrey[900],
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(38)),
-          ),
+          height: MediaQuery.of(context).size.height - 150,
+          color: Colors.black,
 
           alignment: Alignment.center,
           child: FutureBuilder<File>(
@@ -129,17 +116,14 @@ class ImageScreen extends StatelessWidget {
             builder: (_, snapshot) {
               final file = snapshot.data;
               if (file == null) return Container();
-              return Image.file(file);
+              return Image.file(
+                  file,
+                  height: MediaQuery.of(context).size.height - 150,
+                  fit: BoxFit.contain,
+              );
             },
           ),
         ),
-        // SizedBox(
-        //   height: 20,
-        // ),
-        // Container(
-        //   color: Colors.pink,
-        //   height: 350,
-        // )
       ],
     );
   }

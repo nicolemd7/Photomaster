@@ -19,10 +19,15 @@ class _ChipDemoState extends State<ChipDemo> {
   bool _isSelected;
   List<Tag> _allTags;
   List<String> _filters;
-  List<dynamic> _idtags;
-  List<dynamic> _idimages;
+  List<dynamic> _idtags = [];
+  List<dynamic> _idimages = [];
   List<String> _choices;
   int _choiceIndex;
+  String tagname = "";
+  final _formKey = GlobalKey<FormState>();
+  TagsOperations tagsOperations = TagsOperations();
+
+  TextEditingController input_tag = TextEditingController();
 
   @override
   void initState() {
@@ -39,58 +44,138 @@ class _ChipDemoState extends State<ChipDemo> {
     setState(() {
       _allTags = _tagsOperations;
     });
+  }
 
-    print(_allTags);
+  TextButton okButton() {
+    return (TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        final tag = Tag(name: tagname);
+        tagsOperations.createTag(tag);
+
+        print("TAG CREATED");
+        get_data();
+        Navigator.pop(context);
+      },
+    ));
+  }
+
+  TextButton ok_delete_Button(id) {
+    return (TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        print("$id DELETED");
+        final tag = Tag(id: id);
+        tagsOperations.deleteTag(tag);
+        get_data();
+        Navigator.pop(context);
+      },
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    return
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              Wrap(
       children: selectedTags.toList(),
-    );
+    ),
+              ElevatedButton(
+                onPressed: (){
+                  showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text('Add a new tag'),
+                        content: Container(
+                          height: 70,
+                            child: Column(
+                              children: [
+                                TextField(
+                                  controller: input_tag,
+                                  autofocus: true,
+                                  decoration: const InputDecoration(labelText: "Enter a new tag"),
+                                  onChanged: (val){
+                                    tagname = val ?? null;
+                                    print(tagname);
+                                  },
+                                )
+                              ],
+                            )
+                        ),
+                        actions: [
+                          okButton()
+                        ],
+                      )
+                  );
+                },
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all(CircleBorder()),
+                  ),
+                    child: Icon(Icons.add)
+                ),
+            ],
+          ),
+        );
   }
 
   Iterable<Widget> get selectedTags sync* {
     // important
     if (_allTags != null) {
-      //print(_allTags);
+      print(_allTags);
       for (Tag company in _allTags) {
         print(company);
         yield Padding(
           padding: const EdgeInsets.all(6.0),
-          child: FilterChip(
-            backgroundColor: Colors.tealAccent[200],
-            avatar: CircleAvatar(
-              backgroundColor: Colors.cyan,
-              child: Text(
-                company.name[0].toUpperCase(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            label: Text(
-              company.name,
-            ),
-            selected: _filters.contains(company.name),
-            selectedColor: Colors.purpleAccent,
-            onSelected: (bool selected) {
-              setState(() {
-                if (selected) {
-                  _filters.add(company.name);
-                  _idtags.add(company.id);
-                  _idimages.add(widget.id);
-                } else {
-                  _filters.removeWhere((String name) {
-                    return name == company.name;
-                  });
-                }
-              });
+          child: GestureDetector(
+            onLongPress: (){
+              showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text('Are you sure you want to delete this tag?'),
+                    actions: [
+                      ok_delete_Button(company.id)
+                    ],
+                  )
+              );
             },
-          ),
-        );
+            child: FilterChip(
+              backgroundColor: Colors.tealAccent[200],
+              avatar: CircleAvatar(
+                backgroundColor: Colors.cyan,
+                child: Text(
+                  company.name[0].toUpperCase(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              label: Text(
+                company.name,
+              ),
+              selected: _filters.contains(company.name),
+              selectedColor: Colors.purpleAccent,
+              onSelected: (bool selected) {
+                setState(() {
+                  if (selected) {
+                    _filters.add(company.name);
+                    _idtags.add(company.id);
+                    _idimages.add(widget.id);
+                    print("selected");
+                  } else {
+                    print("not selected");
+                    _filters.removeWhere((String name) {
+                      return name == company.name;
+                    });
+                  }
+                });
+              },
+            ),
+        ));
       }
     } else {
-      print("no");
-      Text("nope");
+      print("no tags created!");
+      Text("no tags created!");
     }
   }
 }
