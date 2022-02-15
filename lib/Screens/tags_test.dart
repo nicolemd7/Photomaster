@@ -9,6 +9,8 @@ class ChipDemo extends StatefulWidget {
   TagsOperations _tagsOperations = TagsOperations();
   @override
   State<StatefulWidget> createState() => _ChipDemoState();
+  final id;
+  ChipDemo({this.id});
 }
 
 class _ChipDemoState extends State<ChipDemo> {
@@ -75,7 +77,7 @@ class _ChipDemoState extends State<ChipDemo> {
                 if (selected) {
                   _filters.add(company.name);
                   _idtags.add(company.id);
-                  // _idimages.add(image.id);
+                  _idimages.add(widget.id);
                 } else {
                   _filters.removeWhere((String name) {
                     return name == company.name;

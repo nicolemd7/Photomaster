@@ -12,7 +12,8 @@ class ImageDetails extends StatefulWidget {
   final img_path;
   final img_tags;
 
-  ImageDetails({this.img, this.img_path, this.img_tags});
+  ImageDetails(
+      {this.img, this.img_path, this.img_tags, String img_id, String id});
 
   @override
   _ImageDetailsState createState() => _ImageDetailsState();

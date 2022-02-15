@@ -20,17 +20,6 @@ import 'package:photomaster/Screens/Tags.dart';
 import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
 
-// var suggestTag = [
-//   "Bird",
-//   "Ocean",
-//   "Friend",
-//   "BestFriend",
-//   "Mom",
-//   "Dad",
-//   "Sibling",
-//   "Bestpic"
-// ];
-
 class TagStateController extends GetxController {
   var ListTags = List<String>.empty(growable: true).obs;
 }
@@ -144,62 +133,13 @@ class AssetThumbnail extends StatelessWidget {
               MaterialPageRoute(
                 builder: (_) {
                   if (asset.type == AssetType.image) {
-                    return ImageDetails(
+                    var imageDetails = ImageDetails(
                       img: asset.file,
                       img_path: " Image path is " + asset.relativePath,
-                      //img_tags: "Tags assigned to this image "+tagcreation.dropdown(),
-                      //img_path: asset.relativePath + asset.title,
-                      img_tags: ChipDemo(),
+                      // id: "Image ID " + asset.id.toString(),
+                      img_tags: ChipDemo(id: asset.id),
                     );
-                    // If this is an image, navigate to ImageScreen
-
-                    // return Flexible(
-                    //   child: Column(
-                    //     children: [
-                    //       ImageScreen(imageFile: asset.file),
-                    //       Material(
-
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.all(8),
-                    //           child: TypeAheadField(
-                    //             textFieldConfiguration: TextFieldConfiguration(
-                    //                 controller: textController,
-                    //                 onEditingComplete: () {
-                    //                   controller.ListTags.add(
-                    //                       textController.text);
-                    //                   textController.clear();
-                    //                 },
-                    //                 autofocus: false,
-                    //                 style: DefaultTextStyle.of(context)
-                    //                     .style
-                    //                     .copyWith(
-                    //                         fontSize: 20,
-                    //                         fontStyle: FontStyle.normal),
-                    //                 decoration: InputDecoration(
-                    //                     border: OutlineInputBorder(),
-                    //                     hintText: 'Select or Enter a Tag')),
-                    //             suggestionsCallback: (String pattern) {
-                    //               return suggestTag.where((e) => e
-                    //                   .toLowerCase()
-                    //                   .contains(pattern.toLowerCase()));
-                    //             },
-                    //             onSuggestionSelected: (String suggestion) =>
-                    //                 controller.ListTags.add(suggestion),
-                    //             itemBuilder:
-                    //                 (BuildContext context, String itemData) {
-                    //               return ListTile(
-                    //                 leading: Icon(Icons.tag),
-                    //                 title: Text(itemData),
-                    //               );
-                    //             },
-                    //           ),
-                    //         ),
-                    //       ),
-
-                    //               child: Text(""),
-                    //     ],
-                    //   ),
-                    // );
+                    return imageDetails;
                   } else {
                     // if it's not, navigate to VideoScreen
                     return VideoScreen(videoFile: asset.file);
