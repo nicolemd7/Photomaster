@@ -187,8 +187,7 @@ class _ChipDemoState extends State<ChipDemo> {
           ),
         );
       }
-    }
-    else{
+    } else {
       print("no");
       Text("nope");
     }

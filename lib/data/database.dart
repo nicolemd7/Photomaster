@@ -36,7 +36,12 @@ class DatabaseRepository {
           "FK_image_tags INTEGER NOT NULL,"
           "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId) "
           ");");
-
+      await db.execute("CREATE TABLE IF NOT EXISTS transaction("
+          " FtagId INTEGER NOT NULL,"
+          "FimageId INTEGER NOT NULL,"
+          "FOREIGN KEY (FtagId) REFERENCES tager(tagId),"
+          "FOREIGN KEY (FimageId) REFERENCES images(imageId),"
+          "  );");
       await db.execute("CREATE TABLE IF NOT EXISTS tager("
           " tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
           "tagName STRING NOT NULL,"

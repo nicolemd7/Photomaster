@@ -56,32 +56,35 @@ class _ImageDetailsState extends State<ImageDetails> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // Text(
-                      //   //Image Tags
-                      //   widget.img_tags,
-                      //   style: TextStyle(
-                      //     color: Colors.lightBlueAccent,
-                      //     fontSize: 22,
-                      //     fontWeight: FontWeight.w600,
-                      //   ),
-                      // ),
+                  Container(
+                    height: 305,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // Text(
+                        //   //Image Tags
+                        //   widget.img_tags,
+                        //   style: TextStyle(
+                        //     color: Colors.lightBlueAccent,
+                        //     fontSize: 22,
+                        //     fontWeight: FontWeight.w600,
+                        //   ),
+                        // ),
 
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        //Image Path
-                        widget.img_path,
-                        style: TextStyle(
-                          fontSize: 14,
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
+                        Text(
+                          //Image Path
+                          widget.img_path,
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
 
-                      widget.img_tags,
-                    ],
+                        widget.img_tags,
+                      ],
+                    ),
                   ),
                   Expanded(
                     child: Row(
