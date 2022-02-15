@@ -26,7 +26,16 @@ class _ChipDemoState extends State<ChipDemo> {
     _isSelected = false;
     _choiceIndex = 0;
     _filters = <String>[];
-    Future<List<Tag>> _allTags = _tagsOperations;
+    get_data();
+  }
+
+  void get_data() async {
+    var _tagsOperations = await TagsOperations().getAllTags();
+    setState(() {
+      _allTags = _tagsOperations;
+    });
+
+    print(_allTags);
   }
 
   @override
@@ -145,6 +154,7 @@ class _ChipDemoState extends State<ChipDemo> {
   Iterable<Widget> get selectedTags sync* {
     // important
     if (_allTags != null) {
+      print(_allTags);
       for (Tag company in _allTags) {
         print(company);
         yield Padding(
@@ -177,6 +187,10 @@ class _ChipDemoState extends State<ChipDemo> {
           ),
         );
       }
+    }
+    else{
+      print("no");
+      Text("nope");
     }
   }
 //
