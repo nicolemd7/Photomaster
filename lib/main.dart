@@ -3,6 +3,7 @@ import 'package:photomaster/Enhancements/main3.dart';
 import 'package:photomaster/Screens/Tags.dart';
 import 'package:photomaster/Screens/home.dart';
 import 'package:photomaster/Screens/gallery.dart';
+import 'package:photomaster/Screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:photomaster/albums/main2.dart';
 
@@ -15,9 +16,9 @@ class Photomaster extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: HomeScreen.id,
+      initialRoute: SplashScreen.id,
       routes: {
-        HomeScreen.id: (context) => HomeScreen(),
+        SplashScreen.id: (context) => SplashScreen(),
         GalleryScreen.id: (context) => GalleryScreen(),
         Main2.id: (context) => Main2(),
         Tags.id: (context) => Tags(),

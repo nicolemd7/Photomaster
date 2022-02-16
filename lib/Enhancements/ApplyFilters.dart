@@ -13,7 +13,7 @@ ApplyFilters(context,_image)async{
       builder: (context) => new PhotoFilterSelector(
         title: Text("Photo Filter Example"),
         image: image,
-        appBarColor: Colors.yellow[900],
+        appBarColor: Colors.black,
         filters: presetFiltersList,
         filename: fileName,
         loader: Center(child: CircularProgressIndicator()),

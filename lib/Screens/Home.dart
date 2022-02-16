@@ -11,25 +11,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(
-//           title: Text("Photomaster"),
-//           backgroundColor: Colors.blueGrey[900],
-//         ),
-// //       body: Center(
-// //         child: TextButton(
-// //           child: Text("Open Gallery"),
-// //           onPressed: () async {
-// //             final permitted = await PhotoManager.requestPermission();
-// //             if (!permitted) return;
-// //             Navigator.pushNamed(context, GalleryScreen.id);
-// //           },
-// //         ),
-// //       ),
-// //     );
-// //   }
-// // }
-
       return AspectRatio(
         aspectRatio: 19/9,
         child: Container(
@@ -74,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   left: 25,
                   top: 742,
                   child: Container(
-                    width: 327,
+
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: Color(0xff18191f),

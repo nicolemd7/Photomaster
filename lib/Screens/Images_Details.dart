@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:photomaster/Enhancements/EditImg.dart';
 import 'package:photomaster/data/tags_operations.dart';
 import 'package:flutter/material.dart';
 import 'package:photomaster/models/tags.dart';

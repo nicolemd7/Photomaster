@@ -1,5 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:photomaster/Enhancements/ApplyFilters.dart';
+import 'package:photomaster/Enhancements/EditImg.dart';
+import 'package:photomaster/Enhancements/SaveInGallery.dart';
 import 'package:photomaster/Enhancements/main3.dart';
 import 'package:photomaster/Screens/tags_test.dart';
 import 'package:photomaster/albums/main2.dart';
@@ -19,6 +23,7 @@ import 'package:photomaster/Screens/Images_Details.dart';
 import 'package:photomaster/Screens/Tags.dart';
 import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
+import 'package:photomaster/Enhancements/GetImg.dart';
 
 class TagStateController extends GetxController {
   var ListTags = List<String>.empty(growable: true).obs;
@@ -33,6 +38,7 @@ class GalleryScreen extends StatefulWidget {
 class _GalleryScreenState extends State<GalleryScreen> {
   // This will hold all the assets we fetched
   List<AssetEntity> assets = [];
+  File _image;
 
   @override
   void initState() {
@@ -60,11 +66,82 @@ class _GalleryScreenState extends State<GalleryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey[900],
+        backgroundColor: Colors.black,
         title: Text(
           'Gallery',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          FlatButton(onPressed: () async{
+            var _Ifile = await GetiImg(_image); // function called from GetImg.dart
+            if (_Ifile != null) {
+              setState(() async {
+                _image = _Ifile;
+                if (_image != null) {
+                  var _Ifile = await EditImg(_image); // function called from EditImg.dart
+                  if (_Ifile != null) {
+                    setState(() {
+                      _image = _Ifile;
+                    });
+                    if (_image != null) {
+                      await SaveImg(_image); // function called from SaveInGallery.dart
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "Select a image first :-(",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.yellow[900],
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+                  }
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "Select a image first :-(",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                }
+              });
+            }
+          }, child: Icon(Icons.edit, color: Colors.white,)),
+          FlatButton(onPressed: () async {
+            var _Ifile_filter = await GetiImg(_image); // function called from GetImg.dart
+            if (_Ifile_filter != null) {
+              var _Ifile = await ApplyFilters(context, _Ifile_filter); // function called from ApplyFilters.dart
+              if (_Ifile != null) {
+                setState(() {
+                  _image = _Ifile;
+                });
+                if (_image != null) {
+                  await SaveImg(_image); // function called from SaveInGallery.dart
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "Select a image first :-(",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.yellow[900],
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                }
+              }
+            } else {
+              Fluttertoast.showToast(
+                  msg: "Select a image first :-(",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            }
+          }, child: Icon(Icons.filter, color: Colors.white,))
+        ],
       ),
       body: GridView.builder(
         primary: false,
@@ -135,7 +212,7 @@ class AssetThumbnail extends StatelessWidget {
                   if (asset.type == AssetType.image) {
                     var imageDetails = ImageDetails(
                       img: asset.file,
-                      img_path: " Image path is " + asset.relativePath,
+                      img_path: asset.relativePath,
                       // id: "Image ID " + asset.id.toString(),
                       img_tags: ChipDemo(id: asset.id),
                     );

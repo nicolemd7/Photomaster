@@ -19,9 +19,9 @@ EditImg(_image)async{
       ],
       androidUiSettings: AndroidUiSettings(
           toolbarTitle: 'Cropper',
-          activeControlsWidgetColor: Colors.yellow[900],
-          toolbarColor: Colors.yellow[900],
-          toolbarWidgetColor: Colors.white,
+          activeControlsWidgetColor: Colors.white,
+          toolbarColor: Colors.black,
+          // toolbarWidgetColor: Colors.white,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false),
       iosUiSettings: IOSUiSettings(
