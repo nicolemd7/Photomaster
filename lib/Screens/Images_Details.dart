@@ -53,23 +53,30 @@ class _ImageDetailsState extends State<ImageDetails> {
               SizedBox(
                 height: 10,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal:20.0),
-                child: Text(
-                  //Image Path
-                  widget.img_path,
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal:20.0),
+              //   child: Text(
+              //     //Image Path
+              //     widget.img_path,
+              //     style: TextStyle(
+              //       fontSize: 14,
+              //     ),
+              //   ),
+              // ),
+              SizedBox(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: widget.img_tags)
               ),
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 20.0), child: widget.img_tags),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Row(
                   children: <Widget>[
                     Expanded(
                       child: FlatButton(
+                        height: 50,
                         onPressed: () {
                           Navigator.pop(context);
                         },
@@ -104,28 +111,30 @@ class ImageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          //color: Colors.blueGrey[900],
-          height: MediaQuery.of(context).size.height - 150,
-          color: Colors.black,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            //color: Colors.blueGrey[900],
+            height: MediaQuery.of(context).size.height -120,
+            color: Colors.black,
 
-          alignment: Alignment.center,
-          child: FutureBuilder<File>(
-            future: imageFile,
-            builder: (_, snapshot) {
-              final file = snapshot.data;
-              if (file == null) return Container();
-              return Image.file(
-                  file,
-                  height: MediaQuery.of(context).size.height - 150,
-                  fit: BoxFit.contain,
-              );
-            },
+            alignment: Alignment.center,
+            child: FutureBuilder<File>(
+              future: imageFile,
+              builder: (_, snapshot) {
+                final file = snapshot.data;
+                if (file == null) return Container();
+                return Image.file(
+                    file,
+                    height: MediaQuery.of(context).size.height - 120,
+                    fit: BoxFit.contain,
+                );
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

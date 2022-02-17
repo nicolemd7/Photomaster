@@ -11,7 +11,7 @@ ApplyFilters(context,_image)async{
     context,
     new MaterialPageRoute(
       builder: (context) => new PhotoFilterSelector(
-        title: Text("Photo Filter Example"),
+        title: Text("Photo Filter"),
         image: image,
         appBarColor: Colors.black,
         filters: presetFiltersList,

@@ -10,16 +10,16 @@ SaveImg(_image)async{
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green[400],
+        backgroundColor: Colors.black,
         textColor: Colors.white,
         fontSize: 16.0):
     Fluttertoast.showToast(
         msg:
-        "Something went wrong try again plz!!",
+        "Something went wrong! try again",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green[400],
+        backgroundColor: Colors.black,
         textColor: Colors.white,
         fontSize: 16.0);
   });
