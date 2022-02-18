@@ -31,12 +31,18 @@ class DatabaseRepository {
     return await openDatabase(path, version: _databaseVersion, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE IF NOT EXISTS images("
-          "imageId INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "imageId INTEGER PRIMARY KEY,"
           "imagePath STRING NOT NULL,"
           "FK_image_tags INTEGER NOT NULL,"
           "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId) "
           ");");
-
+      // await db.execute("CREATE TABLE IF NOT EXISTS transaction("
+      //     " FtagId INTEGER NOT NULL,"
+      //     "FimageId INTEGER NOT NULL,"
+      //     "FOREIGN KEY (FtagId) REFERENCES tager(tagId),"
+      //     "FOREIGN KEY (FimageId) REFERENCES images(imageId),"
+      //     "  );");
+      // THIS IS CAUSING ISSUE
       await db.execute("CREATE TABLE IF NOT EXISTS tager("
           " tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
           "tagName STRING NOT NULL,"

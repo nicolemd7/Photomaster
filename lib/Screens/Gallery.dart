@@ -1,5 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:photomaster/Enhancements/ApplyFilters.dart';
+import 'package:photomaster/Enhancements/EditImg.dart';
+import 'package:photomaster/Enhancements/SaveInGallery.dart';
 import 'package:photomaster/Enhancements/main3.dart';
 import 'package:photomaster/Screens/tags_test.dart';
 import 'package:photomaster/albums/main2.dart';
@@ -19,17 +23,7 @@ import 'package:photomaster/Screens/Images_Details.dart';
 import 'package:photomaster/Screens/Tags.dart';
 import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
-
-// var suggestTag = [
-//   "Bird",
-//   "Ocean",
-//   "Friend",
-//   "BestFriend",
-//   "Mom",
-//   "Dad",
-//   "Sibling",
-//   "Bestpic"
-// ];
+import 'package:photomaster/Enhancements/GetImg.dart';
 
 class TagStateController extends GetxController {
   var ListTags = List<String>.empty(growable: true).obs;
@@ -42,9 +36,128 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  // This will hold all the assets we fetched
-  List<AssetEntity> assets = [];
+  int currentIndex = 0;
 
+
+  void OnSelected(BuildContext context, int item)async{
+    switch(item){
+      case 0:
+        File _edit_image;
+        var _Ifile = await GetiImg(_edit_image); // function called from GetImg.dart
+        if (_Ifile != null) {
+          setState(() async {
+            _edit_image = _Ifile;
+            if (_edit_image != null) {
+              var _Ifile = await EditImg(_edit_image); // function called from EditImg.dart
+              if (_Ifile != null) {
+                setState(() {
+                  _edit_image = _Ifile;
+                });
+                if (_edit_image != null) {
+                  await SaveImg(_edit_image); // function called from SaveInGallery.dart
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "Select a image first :-(",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                }
+              }
+            }
+          });
+        }
+        break;
+      case 1:
+        File _filter_image;
+        var _Ifile_filter = await GetiImg(_filter_image);
+        if (_Ifile_filter != null) {
+          var _Ifile = await ApplyFilters(context, _Ifile_filter);
+          if (_Ifile != null) {
+            setState(() {
+              _filter_image = _Ifile;
+            });
+            if (_filter_image != null) {
+              await SaveImg(_filter_image);
+            } else {
+              Fluttertoast.showToast(
+                  msg: "Select a image first :-(",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.black,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+            }
+          }
+        }
+        break;
+    }
+  }
+
+  final screens = [
+    grid_gallary(),
+    MyHomePage()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        title: Text(
+          'Gallery',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          PopupMenuButton(
+              onSelected: (item) => OnSelected(context, item),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 0,
+                  child: Text("Edit"),
+                ),
+                PopupMenuItem(
+                  value: 1,
+                  child: Text("Filter"),
+                ),
+              ]
+              ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.shifting,
+        currentIndex: currentIndex,
+        onTap: (index) => setState(()=>{currentIndex = index}),
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "Gallery",
+            backgroundColor: Colors.black
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.photo_album_rounded),
+              label: "Album",
+            backgroundColor: Colors.black
+          ),
+        ],
+      ),
+      body: screens[currentIndex]
+    );
+  }
+}
+
+class grid_gallary extends StatefulWidget {
+  @override
+  State<grid_gallary> createState() => _grid_gallaryState();
+}
+
+class _grid_gallaryState extends State<grid_gallary> {
+  List<AssetEntity> assets = [];
   @override
   void initState() {
     _fetchAssets();
@@ -69,51 +182,25 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueGrey[900],
-        title: Text(
-          'Gallery',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+    return GridView.builder(
+      primary: false,
+      padding: const EdgeInsets.all(20),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        // A grid view with 3 items per row
+        crossAxisCount: 2,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: MediaQuery.of(context).size.width /
+            (MediaQuery.of(context).size.height / 2),
       ),
-      body: GridView.builder(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          // A grid view with 3 items per row
-          crossAxisCount: 2,
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
-          childAspectRatio: MediaQuery.of(context).size.width /
-              (MediaQuery.of(context).size.height / 2),
-        ),
-        itemCount: assets.length,
-        itemBuilder: (BuildContext context, index) {
-          return AssetThumbnail(asset: assets[index]);
-        },
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-                title: Text('Your Tags'),
-                trailing: Icon(Icons.payment),
-                onTap: () => Navigator.pushNamed(context, Tags.id)),
-            ListTile(
-                title: Text('My Albums'),
-                trailing: Icon(Icons.payment),
-                onTap: () => Navigator.pushNamed(context, Main2.id)),
-            ListTile(
-                title: Text('Image Editor'),
-                trailing: Icon(Icons.payment),
-                onTap: () => Navigator.pushNamed(context, Main3.id)),
-          ],
-        ),
-      ),
+      itemCount: assets.length,
+      itemBuilder: (BuildContext context, index) {
+        return AssetThumbnail(asset: assets[index]);
+      },
     );
   }
 }
+
 
 class AssetThumbnail extends StatelessWidget {
   const AssetThumbnail({
@@ -144,62 +231,13 @@ class AssetThumbnail extends StatelessWidget {
               MaterialPageRoute(
                 builder: (_) {
                   if (asset.type == AssetType.image) {
-                    return ImageDetails(
+                    var imageDetails = ImageDetails(
                       img: asset.file,
-                      img_path: " Image path is " + asset.relativePath,
-                      //img_tags: "Tags assigned to this image "+tagcreation.dropdown(),
-                      //img_path: asset.relativePath + asset.title,
-                      img_tags: ChipDemo(),
+                      img_path: asset.relativePath,
+                      // id: "Image ID " + asset.id.toString(),
+                      img_tags: ChipDemo(id: asset.id),
                     );
-                    // If this is an image, navigate to ImageScreen
-
-                    // return Flexible(
-                    //   child: Column(
-                    //     children: [
-                    //       ImageScreen(imageFile: asset.file),
-                    //       Material(
-
-                    //         child: Padding(
-                    //           padding: const EdgeInsets.all(8),
-                    //           child: TypeAheadField(
-                    //             textFieldConfiguration: TextFieldConfiguration(
-                    //                 controller: textController,
-                    //                 onEditingComplete: () {
-                    //                   controller.ListTags.add(
-                    //                       textController.text);
-                    //                   textController.clear();
-                    //                 },
-                    //                 autofocus: false,
-                    //                 style: DefaultTextStyle.of(context)
-                    //                     .style
-                    //                     .copyWith(
-                    //                         fontSize: 20,
-                    //                         fontStyle: FontStyle.normal),
-                    //                 decoration: InputDecoration(
-                    //                     border: OutlineInputBorder(),
-                    //                     hintText: 'Select or Enter a Tag')),
-                    //             suggestionsCallback: (String pattern) {
-                    //               return suggestTag.where((e) => e
-                    //                   .toLowerCase()
-                    //                   .contains(pattern.toLowerCase()));
-                    //             },
-                    //             onSuggestionSelected: (String suggestion) =>
-                    //                 controller.ListTags.add(suggestion),
-                    //             itemBuilder:
-                    //                 (BuildContext context, String itemData) {
-                    //               return ListTile(
-                    //                 leading: Icon(Icons.tag),
-                    //                 title: Text(itemData),
-                    //               );
-                    //             },
-                    //           ),
-                    //         ),
-                    //       ),
-
-                    //               child: Text(""),
-                    //     ],
-                    //   ),
-                    // );
+                    return imageDetails;
                   } else {
                     // if it's not, navigate to VideoScreen
                     return VideoScreen(videoFile: asset.file);
