@@ -1,3 +1,4 @@
+import 'package:photomaster/Screens/Images_Details.dart';
 import 'package:photomaster/data/database.dart';
 import 'package:photomaster/models/tags.dart';
 import 'database.dart';
@@ -18,20 +19,27 @@ class TagsOperations {
     db.delete('tager', where: 'tagId=?', whereArgs: [tag.id]);
   }
 
-  assignTag(Image image) async {
+  assignTag(ImageDetails image) async {
     final db = await dbProvider.database;
-    var res = db.update('images', image.toMap(),
-        where: "FK_image_tags=?", whereArgs: [image.tag]);
-    final List<Map<String, dynamic>> maps = await db.query('dogs');
+//    var res = db.update('images', image.toMap(),
+//        where: "FK_image_tags=?", whereArgs: [image.tag]);
+    //TODO: get all rows with a particular image id
+    List<Map> result = await db.rawQuery('SELECT * FROM transactions WHERE FimageId=?', [image.img_id]);
+    print(result);
 
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
-    return List.generate(maps.length, (i) {
-      return Dog(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-        age: maps[i]['age'],
-      );
-    });
+    // print the results
+    result.forEach((row) => print(row));
+
+//    final List<Map<String, dynamic>> maps = await db.query('dogs');
+//
+//    // Convert the List<Map<String, dynamic> into a List<Dog>.
+//    return List.generate(maps.length, (i) {
+//      return Dog(
+//        id: maps[i]['id'],
+//        name: maps[i]['name'],
+//        age: maps[i]['age'],
+//      );
+//    });
   }
 
   Future<List<Tag>> getAllTags() async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photomaster/Screens/gallery.dart';
+import 'package:photomaster/data/database.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String id = "splash_screen";
@@ -394,6 +395,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 onPressed: () async {
                   final permitted = await PhotoManager.requestPermission();
                   if (!permitted) return;
+                  DatabaseRepository db = DatabaseRepository.instance;
+                  db.initDatabase();
                   Navigator.pushNamed(context, GalleryScreen.id);
                 },
               ),

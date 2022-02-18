@@ -4,6 +4,7 @@ import 'package:photomaster/Screens/Tags.dart';
 import 'package:photomaster/Screens/home.dart';
 import 'package:photomaster/Screens/gallery.dart';
 import 'package:photomaster/Screens/splash_screen.dart';
+import 'package:photomaster/data/database.dart';
 import 'package:provider/provider.dart';
 import 'package:photomaster/albums/main2.dart';
 

@@ -21,6 +21,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photomaster/Screens/Images_Details.dart';
 import 'package:photomaster/Screens/Tags.dart';
+import 'package:photomaster/data/tags_operations.dart';
 import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
 import 'package:photomaster/Enhancements/GetImg.dart';
@@ -234,9 +235,11 @@ class AssetThumbnail extends StatelessWidget {
                     var imageDetails = ImageDetails(
                       img: asset.file,
                       img_path: asset.relativePath,
-                      // id: "Image ID " + asset.id.toString(),
+                      img_id: asset.id.toString(),
                       img_tags: ChipDemo(id: asset.id),
                     );
+                    TagsOperations to = TagsOperations();
+                    to.assignTag(imageDetails);
                     return imageDetails;
                   } else {
                     // if it's not, navigate to VideoScreen

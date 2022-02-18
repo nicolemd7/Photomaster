@@ -28,7 +28,28 @@ class DatabaseRepository {
     print("YOU HAVE REACHED DB CREATION");
     print("db location " + documentsDirectory.path);
     String path = join(documentsDirectory.path, _databaseName);
-    return await openDatabase(path, version: _databaseVersion, onOpen: (db) {},
+    _database = await openDatabase(path, version: _databaseVersion, onOpen: (db) async {
+      await db.execute("CREATE TABLE IF NOT EXISTS images("
+          "imageId INTEGER PRIMARY KEY,"
+          "imagePath STRING NOT NULL,"
+          "FK_image_tags INTEGER NOT NULL,"
+          "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId) "
+          ");");
+      await db.execute("CREATE TABLE IF NOT EXISTS transactions("
+          "FtagId INTEGER NOT NULL,"
+          "FimageId INTEGER NOT NULL,"
+          "FOREIGN KEY (FtagId) REFERENCES tager(tagId),"
+          "FOREIGN KEY (FimageId) REFERENCES images(imageId)"
+          ");");
+      print("TB CREATED1");
+      // THIS IS CAUSING ISSUE
+      await db.execute("CREATE TABLE IF NOT EXISTS tager("
+          " tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "tagName STRING NOT NULL,"
+          "unique(tagName)"
+          "  );");
+      print("TB CREATED2");
+    },
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE IF NOT EXISTS images("
           "imageId INTEGER PRIMARY KEY,"
@@ -36,19 +57,20 @@ class DatabaseRepository {
           "FK_image_tags INTEGER NOT NULL,"
           "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId) "
           ");");
-      // await db.execute("CREATE TABLE IF NOT EXISTS transaction("
-      //     " FtagId INTEGER NOT NULL,"
-      //     "FimageId INTEGER NOT NULL,"
-      //     "FOREIGN KEY (FtagId) REFERENCES tager(tagId),"
-      //     "FOREIGN KEY (FimageId) REFERENCES images(imageId),"
-      //     "  );");
+      await db.execute("CREATE TABLE IF NOT EXISTS transaction("
+          "FtagId INTEGER NOT NULL,"
+          "FimageId INTEGER NOT NULL,"
+          "FOREIGN KEY (FtagId) REFERENCES tager(tagId),"
+          "FOREIGN KEY (FimageId) REFERENCES images(imageId),"
+          ");");
+      print("TB CREATED1");
       // THIS IS CAUSING ISSUE
       await db.execute("CREATE TABLE IF NOT EXISTS tager("
           " tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
           "tagName STRING NOT NULL,"
           "unique(tagName)"
           "  );");
-      print("TB CREATED");
+      print("TB CREATED2");
     });
   }
 }
