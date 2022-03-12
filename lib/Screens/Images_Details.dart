@@ -82,7 +82,7 @@ class _ImageDetailsState extends State<ImageDetails> {
                           Navigator.pop(context);
                         },
                         padding: EdgeInsets.symmetric(vertical: 18),
-                        color: Colors.blueGrey[900],
+                        color: Colors.black,
                         child: Text(
                           'Back',
                           style: TextStyle(

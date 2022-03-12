@@ -109,9 +109,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
-        backgroundColor: Colors.black,
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white,
         title: Text(
-          'Gallery',
+          'Photos',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -137,7 +138,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: "Gallery",
+              label: "Photos",
             backgroundColor: Colors.black
           ),
           BottomNavigationBarItem(
