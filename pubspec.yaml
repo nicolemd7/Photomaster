@@ -36,7 +36,7 @@ dependencies:
   path_provider: any
   oktoast: any
   share: any
-  file_picker: ^2.0.13
+  file_picker: ^4.5.1
   image_picker: any
   image_cropper: ^1.2.3
   photofilters: ^2.0.1
@@ -44,6 +44,8 @@ dependencies:
   gallery_saver: any
   fluttertoast: ^7.0.2
   meta: ^1.1.8
+  geolocator: ^8.2.0
+  geocoding: ^2.0.4
 
 
 dev_dependencies:

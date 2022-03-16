@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:photomaster/Enhancements/ApplyFilters.dart';
 import 'package:photomaster/Enhancements/EditImg.dart';
 import 'package:photomaster/Enhancements/SaveInGallery.dart';
@@ -25,6 +29,7 @@ import 'package:photomaster/data/tags_operations.dart';
 import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
 import 'package:photomaster/Enhancements/GetImg.dart';
+import 'package:path/path.dart';
 
 class TagStateController extends GetxController {
   var ListTags = List<String>.empty(growable: true).obs;
@@ -32,6 +37,7 @@ class TagStateController extends GetxController {
 
 class GalleryScreen extends StatefulWidget {
   static const String id = "gallery_screen";
+
   @override
   _GalleryScreenState createState() => _GalleryScreenState();
 }
@@ -39,23 +45,25 @@ class GalleryScreen extends StatefulWidget {
 class _GalleryScreenState extends State<GalleryScreen> {
   int currentIndex = 0;
 
-
-  void OnSelected(BuildContext context, int item)async{
-    switch(item){
+  void OnSelected(BuildContext context, int item) async {
+    switch (item) {
       case 0:
         File _edit_image;
-        var _Ifile = await GetiImg(_edit_image); // function called from GetImg.dart
+        var _Ifile =
+            await GetiImg(_edit_image); // function called from GetImg.dart
         if (_Ifile != null) {
           setState(() async {
             _edit_image = _Ifile;
             if (_edit_image != null) {
-              var _Ifile = await EditImg(_edit_image); // function called from EditImg.dart
+              var _Ifile = await EditImg(
+                  _edit_image); // function called from EditImg.dart
               if (_Ifile != null) {
                 setState(() {
                   _edit_image = _Ifile;
                 });
                 if (_edit_image != null) {
-                  await SaveImg(_edit_image); // function called from SaveInGallery.dart
+                  await SaveImg(
+                      _edit_image); // function called from SaveInGallery.dart
                 } else {
                   Fluttertoast.showToast(
                       msg: "Select a image first :-(",
@@ -98,58 +106,117 @@ class _GalleryScreenState extends State<GalleryScreen> {
     }
   }
 
-  final screens = [
-    grid_gallary(),
-    MyHomePage()
-  ];
+  final screens = [grid_gallary(), MyHomePage()];
+
+  String myAddress = "";
+  Position currentPosition;
+
+  Future<Position> getMyPosition() async {
+    bool locationEnabled;
+    LocationPermission permission;
+
+    locationEnabled = await Geolocator.isLocationServiceEnabled();
+    if (locationEnabled) {
+      permission = await Geolocator.checkPermission();
+      if (permission != LocationPermission.denied &&
+          permission != LocationPermission.deniedForever) {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        try {
+          List<Placemark> placemarks = await placemarkFromCoordinates(
+              position.latitude, position.longitude);
+          Placemark place = placemarks[0];
+          setState(() {
+            currentPosition = position;
+            myAddress =
+                "${place.subLocality}, ${place.administrativeArea}, ${place.locality}, ${place.country}";
+            print(myAddress);
+            print(currentPosition);
+          });
+        } catch (e) {
+          print("error $e");
+        }
+      } else {
+        permission = await Geolocator.requestPermission();
+      }
+    }
+  }
+
+  Future<File> saveImage(String imagepath) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final name = basename(imagepath);
+    final image = File('${dir.path}/$name');
+
+    return File(imagepath).copy(image.path);
+  }
+
+  Future openCamera() async {
+    try {
+      final image =
+          await ImagePicker.platform.pickImage(source: ImageSource.camera);
+
+      if (image == null) return;
+      final imagePermanent = await saveImage(image.path);
+      getMyPosition();
+    } catch (e) {
+      print("error $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.white,
-        title: Text(
-          'Photos',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.black,
+          title: Text(
+            'Photos',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          actions: [
+            PopupMenuButton(
+                onSelected: (item) => OnSelected(context, item),
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 0,
+                        child: Text("Edit"),
+                      ),
+                      PopupMenuItem(
+                        value: 1,
+                        child: Text("Filter"),
+                      ),
+                    ]),
+          ],
         ),
-        actions: [
-          PopupMenuButton(
-              onSelected: (item) => OnSelected(context, item),
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: 0,
-                  child: Text("Edit"),
-                ),
-                PopupMenuItem(
-                  value: 1,
-                  child: Text("Filter"),
-                ),
-              ]
-              ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
-        currentIndex: currentIndex,
-        onTap: (index) => setState(()=>{currentIndex = index}),
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Photos",
-            backgroundColor: Colors.black
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.shifting,
+          currentIndex: currentIndex,
+          onTap: (index) => setState(() => {currentIndex = index}),
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: "Photos",
+                backgroundColor: Colors.black),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.photo_album_rounded),
+                label: "Album",
+                backgroundColor: Colors.black),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            openCamera();
+          },
+          shape: StadiumBorder(side: BorderSide(color: Colors.black)),
+          backgroundColor: const Color(0xfffff4cc),
+          child: Icon(
+            Icons.camera_alt,
+            color: Colors.black,
           ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.photo_album_rounded),
-              label: "Album",
-            backgroundColor: Colors.black
-          ),
-        ],
-      ),
-      body: screens[currentIndex]
-    );
+        ),
+        body: screens[currentIndex]);
   }
 }
 
@@ -160,6 +227,7 @@ class grid_gallary extends StatefulWidget {
 
 class _grid_gallaryState extends State<grid_gallary> {
   List<AssetEntity> assets = [];
+
   @override
   void initState() {
     _fetchAssets();
@@ -202,7 +270,6 @@ class _grid_gallaryState extends State<grid_gallary> {
     );
   }
 }
-
 
 class AssetThumbnail extends StatelessWidget {
   const AssetThumbnail({
