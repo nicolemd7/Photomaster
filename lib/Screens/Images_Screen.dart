@@ -1,28 +1,48 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:photomaster/Enhancements/EditImg.dart';
+import 'package:photomaster/data/image_operations.dart';
 import 'package:photomaster/data/tags_operations.dart';
 import 'package:flutter/material.dart';
+import 'package:photomaster/models/image.dart';
 import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
 import 'package:photomaster/models/Tags.dart';
 import 'package:photomaster/Screens/tags_test.dart';
 
-class ImageDetails extends StatefulWidget {
-  final img;
-  final img_path;
-  final img_tags;
-  final img_id;
+class ImageScreen extends StatefulWidget {
+  final ImageDetails img;
+  Future<File> file;
 
-  ImageDetails(
-      {this.img, this.img_path, this.img_tags, this.img_id});
+  ImageScreen({this.img, this.file});
 
   @override
-  _ImageDetailsState createState() => _ImageDetailsState();
+  _ImageScreenState createState() => _ImageScreenState();
 }
 
-class _ImageDetailsState extends State<ImageDetails> {
+class _ImageScreenState extends State<ImageScreen> {
   TagsOperations _tagsOperations = TagsOperations();
+  ImageOperations _imgOps = ImageOperations();
+  bool imageInfoLoaded = false;
+//  String abs_path;
+
+  loadImageInfo() async {
+//    abs_path = await FlutterAbsolutePath.getAbsolutePath(widget.img.path+widget.img.id);
+    bool imgExists = await _imgOps.imageExists(widget.img);
+    if(imgExists) {
+      widget.img.setStatus = true;
+      widget.img.loadTags();
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    loadImageInfo();
+    // TODO: set imageInfoLoaded as true and call setState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,8 +65,29 @@ class _ImageDetailsState extends State<ImageDetails> {
                         bottomRight: Radius.circular(30),
                       ),
                     ),
-                    child: ImageScreen(
-                      imageFile: widget.img,
+                    child: Container(
+                      //color: Colors.blueGrey[900],
+                      height: MediaQuery.of(context).size.height -120,
+                      color: Colors.black,
+
+                      alignment: Alignment.center,
+                      child: FutureBuilder(
+                        future: widget.file,
+                        builder: (_, file) {
+                          if(file.hasData) {
+                            if (widget.file == null) return Container();
+                            return Image.file(
+                              file.data,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height - 120,
+                              fit: BoxFit.contain,
+                            );
+                          }
+                          else return Container();
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -68,8 +109,10 @@ class _ImageDetailsState extends State<ImageDetails> {
                   height: 60,
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
+                    child: ChipDemo(id: widget.img.id),
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: widget.img_tags)
+//                      child: widget.img_tags
+                  )
               ),
               Align(
                 alignment: Alignment.bottomCenter,
@@ -102,48 +145,47 @@ class _ImageDetailsState extends State<ImageDetails> {
   }
 }
 
-class ImageScreen extends StatelessWidget {
-  const ImageScreen({
-    Key key,
-    @required this.imageFile,
-  }) : super(key: key);
-
-  final Future<File> imageFile;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            //color: Colors.blueGrey[900],
-            height: MediaQuery.of(context).size.height -120,
-            color: Colors.black,
-
-            alignment: Alignment.center,
-            child: FutureBuilder<File>(
-              future: imageFile,
-              builder: (_, snapshot) {
-                final file = snapshot.data;
-                if (file == null) return Container();
-                return Image.file(
-                    file,
-                    height: MediaQuery.of(context).size.height - 120,
-                    fit: BoxFit.contain,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//class ImageScreen extends StatelessWidget {
+//  const ImageScreen({
+//    Key key,
+//    @required this.imageFile,
+//  }) : super(key: key);
+//
+//  final String imageFile;
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return SingleChildScrollView(
+//      child: Column(
+//        children: [
+//          Container(
+//            //color: Colors.blueGrey[900],
+//            height: MediaQuery.of(context).size.height -120,
+//            color: Colors.black,
+//
+//            alignment: Alignment.center,
+//            child: Builder(
+//              builder: (_) {
+//                final file = File(imageFile);
+//                if (file == null) return Container();
+//                return Image.file(
+//                    file,
+//                    height: MediaQuery.of(context).size.height - 120,
+//                    fit: BoxFit.contain,
+//                );
+//              },
+//            ),
+//          ),
+//        ],
+//      ),
+//    );
+//  }
+//}
 
 class VideoScreen extends StatefulWidget {
   const VideoScreen({
     Key key,
-    @required this.videoFile,
+    this.videoFile,
   }) : super(key: key);
 
   final Future<File> videoFile;

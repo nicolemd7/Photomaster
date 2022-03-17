@@ -1,4 +1,4 @@
-import 'package:photomaster/Screens/Images_Details.dart';
+import 'package:photomaster/Screens/Images_Screen.dart';
 import 'package:photomaster/data/database.dart';
 import 'package:photomaster/models/tags.dart';
 import 'database.dart';
@@ -24,7 +24,7 @@ class TagsOperations {
 //    var res = db.update('images', image.toMap(),
 //        where: "FK_image_tags=?", whereArgs: [image.tag]);
     //TODO: get all rows with a particular image id
-    List<Map> result = await db.rawQuery('SELECT * FROM transactions WHERE FimageId=?', [image.img_id]);
+    List<Map> result = await db.rawQuery('SELECT * FROM transactions WHERE FimageId=?', [image.id]);
     print(result);
 
     // print the results
@@ -47,5 +47,11 @@ class TagsOperations {
     List<Map<String, dynamic>> allRows = await db.query('tager');
     List<Tag> tags = allRows.map((tag) => Tag.fromMap(tag)).toList();
     return tags;
+  }
+
+  Future<Tag> fetchTag(int tagId) async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> tag = await db.rawQuery("SELECT * FROM tager WHERE tagId=?", [tagId]);
+    print(tag);
   }
 }

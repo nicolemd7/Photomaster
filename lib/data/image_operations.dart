@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import 'database.dart';
 import 'package:photomaster/models/image.dart';
 import 'package:photomaster/models/tags.dart';
@@ -7,50 +9,62 @@ class ImageOperations {
 
   final dbProvider = DatabaseRepository.instance;
 
-  createImage(Image image) async {
+  Future<bool> imageExists(ImageDetails image) async {
     final db = await dbProvider.database;
+    var res = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM images WHERE imageId=?', [image.id]));
+    print(res);
+    if(res > 0) return true;
+    else return false;
+  }
+
+  createImage(ImageDetails image) async {
+    var db = await dbProvider.database;
     var res = db.insert('images', image.toMap());
     return res;
   }
 
-  updateImage(Image image) async {
+  getAllTagsFor(String id) async {
+    // TODO: iterate through all the tags in that image and get the foreign key
+  }
+
+  updateImage(ImageDetails image) async {
     final db = await dbProvider.database;
     var res = db.update('images', image.toMap(),
         where: "imageId=?", whereArgs: [image.id]);
     return res;
   }
 
-  deleteImage(Image image) async {
+  deleteImage(ImageDetails image) async {
     final db = await dbProvider.database;
     await db.delete('images', where: 'imageId=?', whereArgs: [image.id]);
   }
 
-  Future<List<Image>> getAllImages() async {
+  Future<List<ImageDetails>> getAllImages() async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> allRows = await db.query('images');
-    List<Image> images = allRows.map((image) => Image.fromMap(image)).toList();
+    List<ImageDetails> images = allRows.map((image) => ImageDetails.fromMap(image)).toList();
     return images;
   }
 
   //Weird
-  Future<List<Image>> getAllTaggedImages(Tag tag) async {
+  Future<List<ImageDetails>> getAllTaggedImages(Tag tag) async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> allRows = await db.rawQuery('''
     SELECT * FROM images
     WHERE images.FK_image_tags = FK_tagId 
     ''');
 
-    List<Image> images = allRows.map((image) => Image.fromMap(image)).toList();
+    List<ImageDetails> images = allRows.map((image) => ImageDetails.fromMap(image)).toList();
     return images;
   }
 
-  Future<List<Image>> getAllImagesByTags(Tag tag) async {
+  Future<List<ImageDetails>> getAllImagesByTags(Tag tag) async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> allRows = await db.rawQuery('''
     SELECT * FROM images
     WHERE images.FK_image_tags = tagId
     ''');
-    List<Image> images = allRows.map((image) => Image.fromMap(image)).toList();
+    List<ImageDetails> images = allRows.map((image) => ImageDetails.fromMap(image)).toList();
     return images;
   }
 

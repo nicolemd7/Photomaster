@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:photomaster/Screens/Tags.dart';
 import 'package:photomaster/data/tags_operations.dart';
-import 'package:photomaster/Screens/Images_Details.dart';
+import 'package:photomaster/Screens/Images_Screen.dart';
 import 'package:photomaster/models/tags.dart';
 import 'package:photomaster/models/image.dart';
 

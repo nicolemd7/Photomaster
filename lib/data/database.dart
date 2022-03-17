@@ -29,11 +29,11 @@ class DatabaseRepository {
     print("db location " + documentsDirectory.path);
     String path = join(documentsDirectory.path, _databaseName);
     _database = await openDatabase(path, version: _databaseVersion, onOpen: (db) async {
+      await db.execute("DROP TABLE IF EXISTS images;");
+
       await db.execute("CREATE TABLE IF NOT EXISTS images("
-          "imageId INTEGER PRIMARY KEY,"
-          "imagePath STRING NOT NULL,"
-          "FK_image_tags INTEGER NOT NULL,"
-          "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId) "
+          "imageId STRING PRIMARY KEY,"
+          "imagePath STRING NOT NULL"
           ");");
       await db.execute("CREATE TABLE IF NOT EXISTS transactions("
           "FtagId INTEGER NOT NULL,"
@@ -50,27 +50,6 @@ class DatabaseRepository {
           "  );");
       print("TB CREATED2");
     },
-        onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE IF NOT EXISTS images("
-          "imageId INTEGER PRIMARY KEY,"
-          "imagePath STRING NOT NULL,"
-          "FK_image_tags INTEGER NOT NULL,"
-          "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId) "
-          ");");
-      await db.execute("CREATE TABLE IF NOT EXISTS transaction("
-          "FtagId INTEGER NOT NULL,"
-          "FimageId INTEGER NOT NULL,"
-          "FOREIGN KEY (FtagId) REFERENCES tager(tagId),"
-          "FOREIGN KEY (FimageId) REFERENCES images(imageId),"
-          ");");
-      print("TB CREATED1");
-      // THIS IS CAUSING ISSUE
-      await db.execute("CREATE TABLE IF NOT EXISTS tager("
-          " tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "tagName STRING NOT NULL,"
-          "unique(tagName)"
-          "  );");
-      print("TB CREATED2");
-    });
+        onCreate: (Database db, int version) {});
   }
 }
