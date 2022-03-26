@@ -35,42 +35,44 @@ class DatabaseRepository {
           "FK_image_tags INTEGER NOT NULL,"
           "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId) "
           ");");
+      print("TB CREATED1");
       await db.execute("CREATE TABLE IF NOT EXISTS transactions("
           "FtagId INTEGER NOT NULL,"
           "FimageId INTEGER NOT NULL,"
-          "FOREIGN KEY (FtagId) REFERENCES tager(tagId),"
-          "FOREIGN KEY (FimageId) REFERENCES images(imageId)"
+          "FOREIGN KEY (FtagId) REFERENCES tager (tagId),"
+          "FOREIGN KEY (FimageId) REFERENCES images (imageId)"
           ");");
-      print("TB CREATED1");
+      print("TB CREATED2");
       // THIS IS CAUSING ISSUE
       await db.execute("CREATE TABLE IF NOT EXISTS tager("
           " tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
           "tagName STRING NOT NULL,"
           "unique(tagName)"
           "  );");
-      print("TB CREATED2");
+      print("TB CREATED3");
     },
         onCreate: (Database db, int version) async {
+      print('started');
       await db.execute("CREATE TABLE IF NOT EXISTS images("
           "imageId INTEGER PRIMARY KEY,"
           "imagePath STRING NOT NULL,"
           "FK_image_tags INTEGER NOT NULL,"
-          "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId) "
+          "FOREIGN KEY (FK_image_tags) REFERENCES tager (tagId)"
           ");");
-      await db.execute("CREATE TABLE IF NOT EXISTS transaction("
-          "FtagId INTEGER NOT NULL,"
-          "FimageId INTEGER NOT NULL,"
-          "FOREIGN KEY (FtagId) REFERENCES tager(tagId),"
-          "FOREIGN KEY (FimageId) REFERENCES images(imageId),"
-          ");");
-      print("TB CREATED1");
-      // THIS IS CAUSING ISSUE
+      print('success 1...');
       await db.execute("CREATE TABLE IF NOT EXISTS tager("
-          " tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "tagId INTEGER PRIMARY KEY AUTOINCREMENT,"
           "tagName STRING NOT NULL,"
           "unique(tagName)"
-          "  );");
-      print("TB CREATED2");
+          ");");
+      print('success 2...');
+      await db.execute("CREATE TABLE IF NOT EXISTS transactions("
+            "FtagId INTEGER NOT NULL,"
+            "FimageId INTEGER NOT NULL,"
+            "FOREIGN KEY (FtagId) REFERENCES tager (tagId),"
+            "FOREIGN KEY (FimageId) REFERENCES images (imageId)"
+            ");");
+        print('success 3...');
     });
   }
 }
