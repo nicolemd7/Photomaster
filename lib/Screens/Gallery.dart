@@ -252,21 +252,25 @@ class _grid_gallaryState extends State<grid_gallary> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      primary: false,
-      padding: const EdgeInsets.all(20),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        // A grid view with 3 items per row
-        crossAxisCount: 2,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
-        childAspectRatio: MediaQuery.of(context).size.width /
-            (MediaQuery.of(context).size.height / 2),
+    return Container(
+      color: Colors.black87,
+      child: GridView.builder(
+        primary: false,
+
+        padding: const EdgeInsets.all(20),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          // A grid view with 3 items per row
+          crossAxisCount: 2,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          childAspectRatio: MediaQuery.of(context).size.width /
+              (MediaQuery.of(context).size.height / 2),
+        ),
+        itemCount: assets.length,
+        itemBuilder: (BuildContext context, index) {
+          return AssetThumbnail(asset: assets[index]);
+        },
       ),
-      itemCount: assets.length,
-      itemBuilder: (BuildContext context, index) {
-        return AssetThumbnail(asset: assets[index]);
-      },
     );
   }
 }

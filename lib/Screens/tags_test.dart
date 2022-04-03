@@ -111,6 +111,8 @@ class _ChipDemoState extends State<ChipDemo> {
                         ));
               },
               style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                foregroundColor: MaterialStateProperty.all(Colors.black),
                 shape: MaterialStateProperty.all(CircleBorder()),
               ),
               child: Icon(Icons.add)),
