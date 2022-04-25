@@ -30,6 +30,7 @@ import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
 import 'package:photomaster/Enhancements/GetImg.dart';
 import 'package:path/path.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class TagStateController extends GetxController {
   var ListTags = List<String>.empty(growable: true).obs;
@@ -116,38 +117,28 @@ class _GalleryScreenState extends State<GalleryScreen> {
     LocationPermission permission;
 
     locationEnabled = await Geolocator.isLocationServiceEnabled();
-    if (locationEnabled) {
-      permission = await Geolocator.checkPermission();
-      if (permission != LocationPermission.denied &&
-          permission != LocationPermission.deniedForever) {
-        Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
-        try {
-          List<Placemark> placemarks = await placemarkFromCoordinates(
-              position.latitude, position.longitude);
-          Placemark place = placemarks[0];
-          setState(() {
-            currentPosition = position;
-            myAddress =
-                "${place.subLocality}, ${place.administrativeArea}, ${place.locality}, ${place.country}";
-            print(myAddress);
-            print(currentPosition);
-          });
-        } catch (e) {
-          print("error $e");
-        }
-      } else {
-        permission = await Geolocator.requestPermission();
+    permission = await Geolocator.checkPermission();
+    if (permission != LocationPermission.denied &&
+        permission != LocationPermission.deniedForever) {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      try {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+            position.latitude, position.longitude);
+        Placemark place = placemarks[0];
+        setState(() {
+          currentPosition = position;
+          myAddress =
+              "${place.subLocality}, ${place.administrativeArea}, ${place.locality}, ${place.country}";
+          print(myAddress);
+          print(currentPosition);
+        });
+      } catch (e) {
+        print("error $e");
       }
+    } else {
+      permission = await Geolocator.requestPermission();
     }
-  }
-
-  Future<File> saveImage(String imagepath) async {
-    final dir = await getApplicationDocumentsDirectory();
-    final name = basename(imagepath);
-    final image = File('${dir.path}/$name');
-
-    return File(imagepath).copy(image.path);
   }
 
   Future openCamera() async {
@@ -156,7 +147,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
           await ImagePicker.platform.pickImage(source: ImageSource.camera);
 
       if (image == null) return;
-      final imagePermanent = await saveImage(image.path);
+      try {
+        GallerySaver.saveImage(image.path);
+      }
+      catch (e) {
+        print("saving image error $e");
+      }
       getMyPosition();
     } catch (e) {
       print("error $e");
