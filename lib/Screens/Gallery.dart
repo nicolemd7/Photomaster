@@ -9,9 +9,11 @@ import 'package:photomaster/Enhancements/ApplyFilters.dart';
 import 'package:photomaster/Enhancements/EditImg.dart';
 import 'package:photomaster/Enhancements/SaveInGallery.dart';
 import 'package:photomaster/Enhancements/main3.dart';
+import 'package:photomaster/Screens/google_maps.dart';
 import 'package:photomaster/Screens/tags_test.dart';
 import 'package:photomaster/albums/main2.dart';
 import 'package:photomaster/data/database.dart';
+import 'package:photomaster/data/geotags_operations.dart';
 import 'package:photomaster/data/image_operations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:photomaster/Screens/Images_Details.dart';
 import 'package:photomaster/Screens/Tags.dart';
 import 'package:photomaster/data/tags_operations.dart';
+import 'package:photomaster/models/geotag.dart';
 import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
 import 'package:photomaster/Enhancements/GetImg.dart';
@@ -107,10 +110,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
     }
   }
 
-  final screens = [grid_gallary(), MyHomePage()];
+  final screens = [grid_gallary(), MyHomePage(), GoogleMaps()];
 
   String myAddress = "";
   Position currentPosition;
+
+  GeotagsOperations geotagsOperations = GeotagsOperations();
 
   Future<Position> getMyPosition() async {
     bool locationEnabled;
@@ -132,6 +137,14 @@ class _GalleryScreenState extends State<GalleryScreen> {
               "${place.subLocality}, ${place.administrativeArea}, ${place.locality}, ${place.country}";
           print(myAddress);
           print(currentPosition);
+
+          final geotag = Geotag(lat: currentPosition.latitude, long: currentPosition.longitude, id: 0);
+          print(geotag);
+          print(geotag.lat);
+          print(geotag.long);
+          geotagsOperations.createGeoTag(geotag);
+          geotagsOperations.getAllGeoTags();
+          print("GEOTAG CREATED");
         });
       } catch (e) {
         print("error $e");
@@ -148,7 +161,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
       if (image == null) return;
       try {
-        GallerySaver.saveImage(image.path);
+        GallerySaver.saveImage(image.path).then((value) {
+          setState(() {
+            currentIndex = 0;
+            print('refresh');
+          });
+        });
       }
       catch (e) {
         print("saving image error $e");
@@ -198,6 +216,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.photo_album_rounded),
                 label: "Album",
+                backgroundColor: Colors.black),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.map),
+                label: "Map",
                 backgroundColor: Colors.black),
           ],
         ),

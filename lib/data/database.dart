@@ -49,6 +49,12 @@ class DatabaseRepository {
           "FOREIGN KEY (FimageId) REFERENCES images (imageId)"
           ");");
       print("TB CREATED3");
+      await db.execute("CREATE TABLE IF NOT EXISTS geotag("
+          "id INTEGER NOT NULL,"
+          "lat FLOAT NOT NULL,"
+          "long FLOAT NOT NULL"
+          ");");
+      print("TB CREATED4");
     },
         onCreate: (Database db, int version) async {
       print('started');

@@ -23,6 +23,10 @@ class ImageDetails extends StatefulWidget {
 
 class _ImageDetailsState extends State<ImageDetails> {
   TagsOperations _tagsOperations = TagsOperations();
+  void initState(){
+    print(widget.img_path);
+    print(widget.img_id);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
