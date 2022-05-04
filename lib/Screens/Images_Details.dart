@@ -26,6 +26,7 @@ class _ImageDetailsState extends State<ImageDetails> {
   void initState(){
     print(widget.img_path);
     print(widget.img_id);
+    print(widget.img);
   }
   @override
   Widget build(BuildContext context) {

@@ -10,6 +10,7 @@ import 'package:photomaster/Enhancements/EditImg.dart';
 import 'package:photomaster/Enhancements/SaveInGallery.dart';
 import 'package:photomaster/Enhancements/main3.dart';
 import 'package:photomaster/Screens/google_maps.dart';
+import 'package:photomaster/Screens/search.dart';
 import 'package:photomaster/Screens/tags_test.dart';
 import 'package:photomaster/albums/main2.dart';
 import 'package:photomaster/data/database.dart';
@@ -110,7 +111,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
     }
   }
 
-  final screens = [grid_gallary(), MyHomePage(), GoogleMaps()];
+  final screens = [grid_gallary(), MyHomePage(), GoogleMaps(), Search()];
 
   String myAddress = "";
   Position currentPosition;
@@ -186,7 +187,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
           foregroundColor: Colors.white,
           backgroundColor: Colors.black,
           title: Text(
-            'Photos',
+            'Photomaster',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           actions: [
@@ -220,6 +221,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.map),
                 label: "Map",
+                backgroundColor: Colors.black),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: "Search",
                 backgroundColor: Colors.black),
           ],
         ),
@@ -322,6 +327,7 @@ class AssetThumbnail extends StatelessWidget {
               MaterialPageRoute(
                 builder: (_) {
                   if (asset.type == AssetType.image) {
+                    print(asset.title);
                     var imageDetails = ImageDetails(
                       img: asset.file,
                       img_path: asset.relativePath,
