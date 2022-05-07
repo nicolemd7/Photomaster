@@ -26,7 +26,6 @@ class ImageDetails {   // TODO: Add Change Notifier
     tag = [];
     inDatabase = false;
     loaded = false;
-    loadInfo();
   }
 
   loadInfo() async {
@@ -34,33 +33,42 @@ class ImageDetails {   // TODO: Add Change Notifier
     // check if image with id is in database
     bool exists = await imgOp.imageExists(this);
     if(!exists) {
-      //TODO: If image does not exist - set inDatabase to false
+      // If image does not exist - set inDatabase to false
       this.inDatabase = false;
     }
     else {
       this.inDatabase = true;
-      imgOp.getAllTagsFor(this.id);
+      await imgOp.getAllTagsFor(this);
       //TODO: If image exists - fetch any existing tags for that image
     }
     this.loaded = true;
+    print(this.id);
+    print(this.path);
+    print(this.inDatabase);
+    print(this.loaded);
+    print(this.tag.length);
+    print("-----------------------------");
   }
 
   loadTags() async {
     var _imgOps = ImageOperations();
-    List<dynamic> res = await _imgOps.getAllTagsFor(this.id);
+    List<dynamic> res = await _imgOps.getAllTagsFor(this);
   }
 
-  addImage() async {
+  addTag(Tag newTag) {
+    this.tag.add(newTag);
+  }
 
+  resetTag() {
+    this.tag = [];
   }
 
   static fromMap(dynamic obj) {
     String id = obj['imageId'];
     String path = obj['imagePath'];
 //    List<int> tags = obj['FK_image_tags'];
-    var tags = obj['FK_image_tags'];
     //TODO: Process tags to convert from int to Tag objects
-    return ImageDetails.copy(id: id, path: path, tag: tags, inDatabase: true);
+//    return ImageDetails.copy(id: id, path: path, tag: tags, inDatabase: true);
   }
 
   Map<String, dynamic> toMap() {
@@ -68,7 +76,6 @@ class ImageDetails {   // TODO: Add Change Notifier
       'imageId': id,
       'imagePath': path,
     };
-
     return map;
   }
 }

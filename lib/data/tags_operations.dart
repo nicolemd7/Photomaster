@@ -1,17 +1,16 @@
-import 'package:photomaster/Screens/Images_Screen.dart';
 import 'package:photomaster/data/database.dart';
 import 'package:photomaster/models/tags.dart';
 import 'database.dart';
 import 'package:photomaster/models/image.dart';
 
 class TagsOperations {
-  TagsOperations tagsOperations;
 
   final dbProvider = DatabaseRepository.instance;
 
   createTag(Tag tag) async {
     final db = await dbProvider.database;
-    db.insert('tager', tag.toMap());
+    print(tag.toMap());
+    await db.insert('tager', tag.toMap());
   }
 
   deleteTag(Tag tag) async {
@@ -45,14 +44,18 @@ class TagsOperations {
   Future<List<Tag>> getAllTags() async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> allRows = await db.query('tager');
+    print("allRows: $allRows");
     List<Tag> tags = allRows.map((tag) => Tag.fromMap(tag)).toList();
-    print(tags);
+//    print(tags);
     return tags;
   }
 
   Future<Tag> fetchTag(int tagId) async {
+    print(tagId);
     final db = await dbProvider.database;
     List<Map<String, dynamic>> tag = await db.rawQuery("SELECT * FROM tager WHERE tagId=?", [tagId]);
-    print(tag);
+    print("fetched: $tag");
+    Tag t = Tag.fromMap(tag[0]);
+    return t;
   }
 }

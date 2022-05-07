@@ -216,21 +216,16 @@ class AssetThumbnail extends StatelessWidget {
         // If there's data, display it as an image
 
         return InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) {
-                  if (asset.type == AssetType.image) {
-                    var image = ImageDetails(id: asset.id, path: asset.relativePath);
-                    return ImageScreen(img: image, file: asset.file,);
-                  } else {
-                    // if it's not, navigate to VideoScreen
-                    return VideoScreen(videoFile: asset.file);
-                  }
-                },
-              ),
-            );
+          onTap: () async {
+            if(asset.type == AssetType.image) {
+              var image = ImageDetails(id: asset.id, path: asset.relativePath);
+              await image.loadInfo();
+//              print("gallery ${image.tag}");
+              Navigator.push(context, MaterialPageRoute(builder: (_) => ImageScreen(img: image, file: asset.file,)));
+            }
+            else {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => VideoScreen(videoFile: asset.file)));
+            }
           },
           child: Stack(
             children: [

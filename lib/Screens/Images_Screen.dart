@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:photomaster/models/image.dart';
 import 'package:photomaster/models/tags.dart';
 import 'package:video_player/video_player.dart';
-import 'package:photomaster/models/Tags.dart';
 import 'package:photomaster/Screens/tags_test.dart';
 
 class ImageScreen extends StatefulWidget {
@@ -23,7 +22,9 @@ class ImageScreen extends StatefulWidget {
 
 class _ImageScreenState extends State<ImageScreen> {
   TagsOperations _tagsOperations = TagsOperations();
-  bool imageInfoLoaded = false;
+  ImageOperations _imageOperations = ImageOperations();
+
+//  bool imageInfoLoaded = false;
 //  String abs_path;
 
 //  loadImageInfo() async {
@@ -43,8 +44,20 @@ class _ImageScreenState extends State<ImageScreen> {
     super.initState();
   }
 
+  void addTagCallback(Tag newTag) async {
+    print(newTag.name);
+    _imageOperations.addTag(widget.img, newTag);
+  }
+
+  void remTagCallback(Tag newTag) async {
+    print(newTag.name);
+    _imageOperations.removeTag(widget.img, newTag);
+  }
+
   @override
   Widget build(BuildContext context) {
+//    print("build ${widget.img.tag}");
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -106,9 +119,9 @@ class _ImageScreenState extends State<ImageScreen> {
               //   ),
               // ),
               SizedBox(
-                  height: 60,
+                  height: 100,
                   width: MediaQuery.of(context).size.width,
-                  child: TagInterface(),
+                  child: TagInterface(existingTags: widget.img.tag, addTagCallback: addTagCallback, remTagCallback: remTagCallback,),
 //                  Padding(
 //                    child: ChipDemo(id: widget.img.id),
 //                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
