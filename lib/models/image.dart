@@ -14,6 +14,7 @@ class ImageDetails {   // TODO: Add Change Notifier
   final String path;
   List<Tag> tag;
   bool inDatabase;
+  bool loaded;
 
   set setStatus(bool status) {
     this.inDatabase = status;
@@ -24,10 +25,25 @@ class ImageDetails {   // TODO: Add Change Notifier
   ImageDetails({this.id, this.path}) {
     tag = [];
     inDatabase = false;
+    loaded = false;
+    loadInfo();
   }
-    //TODO: check if image with id is in database
-    //TODO: If image does not exist - set inDatabase to false
-    //TODO: If image exists - fetch any existing tags for that image
+
+  loadInfo() async {
+    ImageOperations imgOp = ImageOperations();
+    // check if image with id is in database
+    bool exists = await imgOp.imageExists(this);
+    if(!exists) {
+      //TODO: If image does not exist - set inDatabase to false
+      this.inDatabase = false;
+    }
+    else {
+      this.inDatabase = true;
+      imgOp.getAllTagsFor(this.id);
+      //TODO: If image exists - fetch any existing tags for that image
+    }
+    this.loaded = true;
+  }
 
   loadTags() async {
     var _imgOps = ImageOperations();

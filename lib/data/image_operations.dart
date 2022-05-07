@@ -24,6 +24,9 @@ class ImageOperations {
   }
 
   getAllTagsFor(String id) async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> tag = await db.rawQuery("SELECT * FROM tager WHERE FimageId=?", [id]);
+    print(tag);
     // TODO: iterate through all the tags in that image and get the foreign key
   }
 

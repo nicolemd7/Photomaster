@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:photomaster/Enhancements/EditImg.dart';
+import 'package:photomaster/Screens/tag_interface.dart';
 import 'package:photomaster/data/image_operations.dart';
 import 'package:photomaster/data/tags_operations.dart';
 import 'package:flutter/material.dart';
@@ -22,23 +23,22 @@ class ImageScreen extends StatefulWidget {
 
 class _ImageScreenState extends State<ImageScreen> {
   TagsOperations _tagsOperations = TagsOperations();
-  ImageOperations _imgOps = ImageOperations();
   bool imageInfoLoaded = false;
 //  String abs_path;
 
-  loadImageInfo() async {
-//    abs_path = await FlutterAbsolutePath.getAbsolutePath(widget.img.path+widget.img.id);
-    bool imgExists = await _imgOps.imageExists(widget.img);
-    if(imgExists) {
-      widget.img.setStatus = true;
-      widget.img.loadTags();
-    }
-    setState(() {});
-  }
+//  loadImageInfo() async {
+////    abs_path = await FlutterAbsolutePath.getAbsolutePath(widget.img.path+widget.img.id);
+//    bool imgExists = await _imgOps.imageExists(widget.img);
+//    if(imgExists) {
+//      widget.img.setStatus = true;
+//      widget.img.loadTags();
+//    }
+//    setState(() {});
+//  }
 
   @override
   void initState() {
-    loadImageInfo();
+//    loadImageInfo();
     // TODO: set imageInfoLoaded as true and call setState
     super.initState();
   }
@@ -108,11 +108,12 @@ class _ImageScreenState extends State<ImageScreen> {
               SizedBox(
                   height: 60,
                   width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    child: ChipDemo(id: widget.img.id),
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-//                      child: widget.img_tags
-                  )
+                  child: TagInterface(),
+//                  Padding(
+//                    child: ChipDemo(id: widget.img.id),
+//                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+////                      child: widget.img_tags
+//                  )
               ),
               Align(
                 alignment: Alignment.bottomCenter,

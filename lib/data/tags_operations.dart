@@ -46,6 +46,7 @@ class TagsOperations {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> allRows = await db.query('tager');
     List<Tag> tags = allRows.map((tag) => Tag.fromMap(tag)).toList();
+    print(tags);
     return tags;
   }
 
