@@ -50,6 +50,12 @@ class DatabaseRepository {
           "unique(tagName)"
           "  );");
       print("TB CREATED2");
+      await db.execute("CREATE TABLE IF NOT EXISTS geotag("
+          "id INTEGER NOT NULL,"
+          "lat FLOAT NOT NULL,"
+          "long FLOAT NOT NULL"
+          ");");
+      print("geotag table created");
     },
         onCreate: (Database db, int version) {});
   }

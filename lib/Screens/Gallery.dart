@@ -1,9 +1,14 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:photomaster/Enhancements/ApplyFilters.dart';
 import 'package:photomaster/Enhancements/EditImg.dart';
 import 'package:photomaster/Enhancements/SaveInGallery.dart';
+import 'package:photomaster/Screens/google_maps.dart';
+import 'package:photomaster/Screens/search.dart';
 import 'package:photomaster/albums/main2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -12,9 +17,12 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photomaster/Screens/Images_Screen.dart';
+import 'package:photomaster/data/geotags_operations.dart';
+import 'package:photomaster/models/geotag.dart';
 import 'package:photomaster/models/image.dart';
 import 'package:video_player/video_player.dart';
 import 'package:photomaster/Enhancements/GetImg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class TagStateController extends GetxController {
   var ListTags = List<String>.empty(growable: true).obs;
@@ -90,8 +98,75 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   final screens = [
     grid_gallary(),
-    MyHomePage()
+    MyHomePage(),
+    GoogleMaps(),
+    Search()
   ];
+
+  String myAddress = "";
+  Position currentPosition;
+
+  GeotagsOperations geotagsOperations = GeotagsOperations();
+
+  Future<Position> getMyPosition() async {
+    bool locationEnabled;
+    LocationPermission permission;
+
+    locationEnabled = await Geolocator.isLocationServiceEnabled();
+    permission = await Geolocator.checkPermission();
+    if (permission != LocationPermission.denied &&
+        permission != LocationPermission.deniedForever) {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      try {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+            position.latitude, position.longitude);
+        Placemark place = placemarks[0];
+        setState(() {
+          currentPosition = position;
+          myAddress =
+          "${place.subLocality}, ${place.administrativeArea}, ${place.locality}, ${place.country}";
+          print(myAddress);
+          print(currentPosition);
+
+          final geotag = Geotag(lat: currentPosition.latitude, long: currentPosition.longitude, id: 0);
+          print(geotag);
+          print(geotag.lat);
+          print(geotag.long);
+          geotagsOperations.createGeoTag(geotag);
+          geotagsOperations.getAllGeoTags();
+          print("GEOTAG CREATED");
+        });
+      } catch (e) {
+        print("error $e");
+      }
+    } else {
+      permission = await Geolocator.requestPermission();
+    }
+  }
+
+  Future openCamera() async {
+    try {
+      final image =
+      await ImagePicker.platform.pickImage(source: ImageSource.camera);
+
+      if (image == null) return;
+      try {
+        GallerySaver.saveImage(image.path).then((value) {
+          setState(() {
+            currentIndex = 0;
+            print('refresh');
+          });
+        });
+      }
+      catch (e) {
+        print("saving image error $e");
+      }
+      getMyPosition();
+    } catch (e) {
+      print("error $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +174,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
+        foregroundColor: Colors.white,
         backgroundColor: Colors.black,
         title: Text(
-          'Gallery',
+          'Photomaster',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -123,19 +199,36 @@ class _GalleryScreenState extends State<GalleryScreen> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         currentIndex: currentIndex,
-        onTap: (index) => setState(()=>{currentIndex = index}),
+        onTap: (index) => setState(() => {currentIndex = index}),
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: "Gallery",
-            backgroundColor: Colors.black
-          ),
+              label: "Photos",
+              backgroundColor: Colors.black),
           BottomNavigationBarItem(
               icon: Icon(Icons.photo_album_rounded),
               label: "Album",
-            backgroundColor: Colors.black
-          ),
+              backgroundColor: Colors.black),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              label: "Map",
+              backgroundColor: Colors.black),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: "Search",
+              backgroundColor: Colors.black),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          openCamera();
+        },
+        shape: StadiumBorder(side: BorderSide(color: Colors.black)),
+        backgroundColor: const Color(0xfffff4cc),
+        child: Icon(
+          Icons.camera_alt,
+          color: Colors.black,
+        ),
       ),
       body: screens[currentIndex]
     );
@@ -173,21 +266,24 @@ class _grid_gallaryState extends State<grid_gallary> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      primary: false,
-      padding: const EdgeInsets.all(20),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        // A grid view with 3 items per row
-        crossAxisCount: 2,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 8,
-        childAspectRatio: MediaQuery.of(context).size.width /
-            (MediaQuery.of(context).size.height / 2),
+    return Container(
+      color: Colors.black87,
+      child: GridView.builder(
+        primary: false,
+        padding: const EdgeInsets.all(20),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          // A grid view with 3 items per row
+          crossAxisCount: 2,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          childAspectRatio: MediaQuery.of(context).size.width /
+              (MediaQuery.of(context).size.height / 2),
+        ),
+        itemCount: assets.length,
+        itemBuilder: (BuildContext context, index) {
+          return AssetThumbnail(asset: assets[index]);
+        },
       ),
-      itemCount: assets.length,
-      itemBuilder: (BuildContext context, index) {
-        return AssetThumbnail(asset: assets[index]);
-      },
     );
   }
 }
