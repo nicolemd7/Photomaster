@@ -80,7 +80,9 @@ class ImageOperations {
   Future<List<ImageDetails>> getAllImages() async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> allRows = await db.query('images');
-    List<ImageDetails> images = allRows.map((image) => ImageDetails.fromMap(image)).toList();
+    print("******************");
+    List<ImageDetails> images = allRows.map<ImageDetails>((image) => ImageDetails.fromMap(image)).toList();
+    print("******************");
     return images;
   }
 

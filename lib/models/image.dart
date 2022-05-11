@@ -64,11 +64,13 @@ class ImageDetails {   // TODO: Add Change Notifier
   }
 
   static fromMap(dynamic obj) {
-    String id = obj['imageId'];
+    String id = obj['imageId'].toString();
     String path = obj['imagePath'];
 //    List<int> tags = obj['FK_image_tags'];
     //TODO: Process tags to convert from int to Tag objects
+    ImageDetails img = ImageDetails(id: id, path: path);
 //    return ImageDetails.copy(id: id, path: path, tag: tags, inDatabase: true);
+  return img;
   }
 
   Map<String, dynamic> toMap() {
