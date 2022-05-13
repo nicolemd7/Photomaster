@@ -11,6 +11,14 @@ class Tag {
     this.name = obj['tagName'];
   }
 
+  Tag.fromMaptransaction(dynamic obj) {
+    this.id = obj['FimageId'];
+  }
+
+  Tag.fromMapimage(dynamic obj) {
+    this.name = obj['imagePath'];
+  }
+
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'tagName': name,

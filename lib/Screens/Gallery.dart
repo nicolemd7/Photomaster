@@ -313,10 +313,9 @@ class AssetThumbnail extends StatelessWidget {
 
         return InkWell(
           onTap: () async {
+            final img_path = await asset.originFile;
             if(asset.type == AssetType.image) {
-              var image = ImageDetails(id: asset.id, path: asset.relativePath+asset.title);
-//              var url = await asset.title;
-//              print("url $url");
+              var image = ImageDetails(id: asset.id, path: img_path.path);
               await image.loadInfo();
 //              print("gallery ${image.tag}");
               Navigator.push(context, MaterialPageRoute(builder: (_) => ImageScreen(img: image, file: asset.file,)));

@@ -29,8 +29,8 @@ class DatabaseRepository {
     print("db location " + documentsDirectory.path);
     String path = join(documentsDirectory.path, _databaseName);
     _database = await openDatabase(path, version: _databaseVersion, onOpen: (db) async {
-      await db.execute("DROP TABLE IF EXISTS images;");
-      await db.execute("DROP TABLE IF EXISTS transactions;");
+      // await db.execute("DROP TABLE IF EXISTS images;");
+      // await db.execute("DROP TABLE IF EXISTS transactions;");
 
       await db.execute("CREATE TABLE IF NOT EXISTS images("
           "imageId STRING PRIMARY KEY,"

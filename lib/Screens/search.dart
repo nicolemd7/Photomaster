@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:photomaster/data/image_operations.dart';
+import 'package:photomaster/data/tags_operations.dart';
+import 'package:photomaster/models/tags.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -13,53 +15,53 @@ class _SearchState extends State<Search> {
   Future<List<String>> assets;
   List<String> a;
   final searchController = TextEditingController();
-  ImageOperations _imageOperations = ImageOperations();
 
-  Future<List<String>> getPaths() async {
-    List<String> a = [];
-    _imageOperations.getAllImages().then((value) => {
-      value.forEach((element) {
-//        print("- ${element.path}");
-      a.add('/storage/emulated/0/'+element.path);
-      })
-    });
-    return a;
-  }
+  TagsOperations tagOp = TagsOperations();
+  ImageOperations _imageOperations = ImageOperations();
 
   void initState() {
     super.initState();
     assets = getPaths();
-//    _imageOperations.getAllImages().then((value) => {
-//      value.forEach((element) {
-//        print("- ${element.path}");
-//      })
-//    });
-//    assets = [
-//      '/storage/emulated/0/WhatsApp/Media/WhatsApp Images/IMG-20220510-WA0000.jpg',
-//      '/storage/emulated/0/Pictures/6c0aa7d6-a13c-4878-b166-5bd193ca92ad2741328015850164049.jpg'
-//    ];
+  }
+
+  Future<List<String>> getPaths() async {
+    List<String> a = [];
+    _imageOperations.getAllImages().then((value) => {
+          value.forEach((element) {
+            a.add(element.path);
+          })
+        });
+    return a;
+  }
+
+  Future<List<String>> searchImageDB() async {
+    print(searchController.text);
+    List<String> a = [];
+    try {
+      var tags = await tagOp.fetchTagWithName(searchController.text);
+      print(tags.id);
+      var transaction = await tagOp.fetchImageIDWithTagID(tags.id);
+      for (Tag id in transaction) {
+        var image = await tagOp.fetchImageIDWithImageID(id.id);
+        setState(() {
+          a.add(image.name);
+          var distinctIds = a.toSet().toList();
+          a = distinctIds;
+          print('asset: $assets');
+        });
+      }
+    } catch (e) {
+      setState(() {
+        assets = getPaths();
+        a = [];
+      });
+      print("asset not found");
+    }
+    return a;
   }
 
   void searchImage() {
-    print(searchController.text);
-//    setState(() {
-//      if(searchController.text.toLowerCase() == 'cat'){
-//        assets = [
-//          '/storage/emulated/0/Pictures/da6f56b9-146c-4a51-bc2b-98855d4937d37019447153435646028.jpg'
-//        ];
-//      }
-//      else if(searchController.text.toLowerCase() == 'room'){
-//        assets = [
-//          '/storage/emulated/0/Pictures/6c0aa7d6-a13c-4878-b166-5bd193ca92ad2741328015850164049.jpg'
-//        ];
-//      }
-//      else {
-//        assets = [
-//          '/storage/emulated/0/Pictures/da6f56b9-146c-4a51-bc2b-98855d4937d37019447153435646028.jpg',
-//          '/storage/emulated/0/Pictures/6c0aa7d6-a13c-4878-b166-5bd193ca92ad2741328015850164049.jpg'
-//        ];
-//      }
-//    });
+    assets = searchImageDB();
   }
 
   @override
@@ -90,6 +92,7 @@ class _SearchState extends State<Search> {
             ),
             Container(
               height: MediaQuery.of(context).size.height - 140 - 70,
+              width: MediaQuery.of(context).size.width,
               color: Colors.black87,
               child: FutureBuilder(
                 future: assets,
@@ -115,23 +118,7 @@ class _SearchState extends State<Search> {
                   }
                   else return CircularProgressIndicator();
                 },
-//                child: GridView.builder(
-//                  primary: false,
-//                  padding: const EdgeInsets.all(20),
-//                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                    // A grid view with 3 items per row
-//                    crossAxisCount: 2,
-//                    mainAxisSpacing: 8,
-//                    crossAxisSpacing: 8,
-//                    childAspectRatio: MediaQuery.of(context).size.width /
-//                        (MediaQuery.of(context).size.height / 2),
-//                  ),
-//                  itemCount: assets.length,
-//                  itemBuilder: (BuildContext context, index) {
-//                    return Image.file(File(assets[index]), fit: BoxFit.cover);
-//                  },
-//                ),
-              ),
+                    ),
             ),
           ],
         ),
