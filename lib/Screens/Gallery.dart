@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:photomaster/Enhancements/ApplyFilters.dart';
 import 'package:photomaster/Enhancements/EditImg.dart';
 import 'package:photomaster/Enhancements/SaveInGallery.dart';
+import 'package:photomaster/Screens/duplicate_detection.dart';
 import 'package:photomaster/Screens/google_maps.dart';
 import 'package:photomaster/Screens/search.dart';
 import 'package:photomaster/albums/main2.dart';
@@ -100,7 +101,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
     grid_gallary(),
     MyHomePage(),
     GoogleMaps(),
-    Search()
+    Search(),
+    DuplicateDetection()
   ];
 
   String myAddress = "";
@@ -217,6 +219,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
               icon: Icon(Icons.search),
               label: "Search",
               backgroundColor: Colors.black),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.control_point_duplicate),
+              label: "Duplicate",
+              backgroundColor: Colors.black),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -242,6 +248,7 @@ class grid_gallary extends StatefulWidget {
 
 class _grid_gallaryState extends State<grid_gallary> {
   List<AssetEntity> assets = [];
+
   @override
   void initState() {
     _fetchAssets();
