@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:photomaster/Screens/duplicate_detection.dart';
 import 'package:photomaster/data/image_operations.dart';
 import 'package:photomaster/data/tags_operations.dart';
 import 'package:photomaster/models/tags.dart';
@@ -97,7 +98,7 @@ class _SearchState extends State<Search> {
               child: FutureBuilder(
                 future: assets,
                 builder: (context, snapshot) {
-                  if(snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.connectionState == ConnectionState.done) {
                     a = snapshot.data;
                     return GridView.builder(
                       primary: false,
@@ -112,13 +113,25 @@ class _SearchState extends State<Search> {
                       ),
                       itemCount: a.length,
                       itemBuilder: (BuildContext context, index) {
-                        return Image.file(File(a[index]), fit: BoxFit.cover);
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ImageDetail(img: a[index],)));
+                          },
+                          child: Image.file(
+                            File(a[index]),
+                            fit: BoxFit.cover,
+                            errorBuilder: (BuildContext context, Object exception,
+                                StackTrace stackTrace) {
+                              return Container(width: 0.0, height: 0.0);
+                            },
+                          ),
+                        );
                       },
                     );
-                  }
-                  else return CircularProgressIndicator();
+                  } else
+                    return CircularProgressIndicator();
                 },
-                    ),
+              ),
             ),
           ],
         ),
