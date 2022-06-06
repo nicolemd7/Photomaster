@@ -155,6 +155,7 @@ class _TagInterfaceState extends State<TagInterface> {
         context: context,
         builder: (_) => AlertDialog(
           content: Container(
+            width: MediaQuery.of(context).size.width - 100,
             child: FutureBuilder<List<Tag>>(
               future: allTags,
               builder: (_, snapshot) {
