@@ -41,7 +41,7 @@ class _DuplicateDetectionState extends State<DuplicateDetection> {
                   .createDateTime
                   .difference(recentAssets[i + 1].createDateTime)
                   .inMilliseconds <
-              1500) {
+              850) {
             final file1 = await recentAssets[i].originFile;
             final file2 = await recentAssets[i + 1].originFile;
             a.add(file1.path);
@@ -173,22 +173,22 @@ class _ImageDetailState extends State<ImageDetail> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: FlatButton(
-                        height: 50,
-                        onPressed: () async {
-                          deleteFile(File(widget.img));
-                        },
-                        padding: EdgeInsets.symmetric(vertical: 18),
-                        color: Colors.red[900],
-                        child: Text(
-                          'Delete',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: FlatButton(
+                    //     height: 50,
+                    //     onPressed: () async {
+                    //       deleteFile(File(widget.img));
+                    //     },
+                    //     padding: EdgeInsets.symmetric(vertical: 18),
+                    //     color: Colors.red[900],
+                    //     child: Text(
+                    //       'Delete',
+                    //       style: TextStyle(
+                    //         color: Colors.white,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               )
