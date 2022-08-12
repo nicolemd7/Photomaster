@@ -14,6 +14,11 @@ Photomaster aims to act as a one stop application that enables users to reduce c
   - Once tags are generated, it is saved in the database along with the image. An album is created, which would then be displayed to the user.
   - The user can tag multiple images using these tags and each image can be assigned multiple tags
 
+- Geolocation
+  - The user will be shown a map which contains locations of various images taken, on clicking a location
+the user will be shown the images taken at that location. The images' locations will be accessed using
+either the coordinates available on the EXIF file or by means of metadata entered by the user
+
 - Enhancements
   - Image selection
         - When you choose an image to edit, it will be highlighted and will then take over the screen, with three options to crop, feature select, and alter the image in the bottom bar.
