@@ -33,4 +33,6 @@ Photomaster aims to act as a one stop application that enables users to reduce c
   - Using this feature we scan through all images in the gallery and identify duplicates of images, these images are then shown to the user and the user is given an option to retain or delete them
 
 
+If you like this project,please consider supporting the creators. Cheers!
+<br/>[Payment Link](https://www.instamojo.com/@mumbaiyuvasansad/)
 
