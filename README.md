@@ -1,5 +1,5 @@
 # Photomaster
-![Photomaster](https://github.com/nicolemd7/Photomaster/blob/aditi/WhatsApp%20Image%202022-02-06%20at%201.32.00%20AM.jpeg)
+![Photomaster](https://github.com/nicolemd7/Photomaster/blob/default/WhatsApp%20Image%202022-02-06%20at%201.32.00%20AM.jpeg)
 
 
 ## About
