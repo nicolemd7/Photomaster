@@ -37,7 +37,7 @@ either the coordinates available on the EXIF file or by means of metadata entere
 - Duplicate Detection
   - Using this feature we scan through all images in the gallery and identify duplicates of images, these images are then shown to the user and the user is given an option to retain or delete them
 
-## To try our app [click here](https://drive.google.com/file/d/1bPP0gEWDbavGY4gUB7AamN63ey1pDj-i/view?usp=sharing)
+## To try our app [click here](https://drive.google.com/file/d/1lnBc_SMsxYxxMKgeqgOvmzIgGfIRsZrL/view?usp=sharing)
 ## If you like this project,please consider supporting it's creators. Cheers!
 <br/>[Payment Link](https://www.instamojo.com/@mumbaiyuvasansad/)
 
